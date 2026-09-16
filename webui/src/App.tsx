@@ -1,63 +1,42 @@
 import { useState } from 'react'
 import { Toaster } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@/components/layout/Sidebar'
-import { MainContent } from '@/components/layout/MainContent'
-import { AuthorFooter } from '@/components/layout/AuthorFooter'
 import { CrawlerConfigPanel } from '@/components/config/CrawlerConfigPanel'
+import { TrendRadarPanel } from '@/components/trend/TrendRadarPanel'
+import { TerminalDialog } from '@/components/console/TerminalDialog'
 import { EnvironmentCheck, isEnvChecked } from '@/components/env/EnvironmentCheck'
-import { LicenseDisclaimer, isLicenseAccepted } from '@/components/license/LicenseDisclaimer'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function App() {
-  // Initialize by checking localStorage if license has been accepted
-  const [licenseAccepted, setLicenseAccepted] = useState(() => isLicenseAccepted())
-  // Initialize by checking localStorage if env check has passed
   const [envChecked, setEnvChecked] = useState(() => isEnvChecked())
-  // State for showing disclaimer manually
-  const [showDisclaimer, setShowDisclaimer] = useState(false)
-
-  const handleEnvCheckComplete = () => {
-    setEnvChecked(true)
-  }
-
-  const handleLicenseAccept = () => {
-    setLicenseAccepted(true)
-    setShowDisclaimer(false)
-  }
-
-  const handleShowDisclaimer = () => {
-    setShowDisclaimer(true)
-  }
+  const { t } = useTranslation('trend')
 
   return (
     <div className="flex flex-col h-screen cyber-grid overflow-hidden relative">
-      {/* License Disclaimer Modal - Shows first or when triggered */}
-      {(!licenseAccepted || showDisclaimer) && (
-        <LicenseDisclaimer onAccept={handleLicenseAccept} />
+      {!envChecked && (
+        <EnvironmentCheck onCheckComplete={() => setEnvChecked(true)} />
       )}
 
-      {/* Environment Check Modal - Shows after license accepted */}
-      {licenseAccepted && !showDisclaimer && !envChecked && (
-        <EnvironmentCheck onCheckComplete={handleEnvCheckComplete} />
-      )}
+      <Sidebar />
 
-      {/* Header Bar */}
-      <Sidebar onShowDisclaimer={handleShowDisclaimer} />
-
-      {/* Main Area */}
-      <div className="flex-1 flex flex-col gap-4 p-4 overflow-hidden min-h-0">
-        {/* Config Panel - Primary Action Area (Always Expanded) */}
-        <div className="flex-shrink-0">
-          <CrawlerConfigPanel />
-        </div>
-
-        {/* Console - Collapsible Terminal */}
-        <MainContent />
+      <div className="flex-1 flex flex-col gap-4 p-4 overflow-auto min-h-0">
+        <Tabs defaultValue="radar" className="flex-1 flex flex-col min-h-0">
+          <TabsList className="self-start">
+            <TabsTrigger value="radar">{t('tabs.radar')}</TabsTrigger>
+            <TabsTrigger value="scan">{t('tabs.scan')}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="radar" className="flex-1 overflow-auto">
+            <TrendRadarPanel />
+          </TabsContent>
+          <TabsContent value="scan" className="flex-1 overflow-auto">
+            <CrawlerConfigPanel />
+          </TabsContent>
+        </Tabs>
       </div>
 
-      {/* Author Footer */}
-      <AuthorFooter />
+      <TerminalDialog />
 
-      {/* Toast notifications - Theme-aware style */}
       <Toaster
         position="top-right"
         toastOptions={{

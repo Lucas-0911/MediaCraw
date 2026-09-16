@@ -4,11 +4,11 @@
     "entries": "{{count}} 条记录",
     "active": "活跃",
     "clear": "清除",
-    "restore": "恢复所有日志"
+    "close": "关闭"
   },
   "banner": {
     "systemInit": "[系统] 系统初始化成功",
-    "configHint": "[信息] 配置参数并启动扫描序列..."
+    "scanningHint": "[信息] 扫描进行中，日志将在此实时输出。"
   },
   "footer": {
     "awaiting": "等待命令..."

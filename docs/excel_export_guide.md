@@ -1,147 +1,148 @@
-# Excel Export Guide
+# Hướng dẫn xuất Excel
 
-## Overview
+## Tổng quan
 
-MediaCrawler now supports exporting crawled data to formatted Excel files (.xlsx) with professional styling and multiple sheets for contents, comments, and creators.
+MediaCrawler hỗ trợ xuất dữ liệu đã crawl ra file Excel (.xlsx) có định dạng, nhiều sheet cho nội dung, comment và creator.
 
-## Features
+## Tính năng
 
-- **Multi-sheet workbooks**: Separate sheets for Contents, Comments, and Creators
-- **Professional formatting**: 
-  - Styled headers with blue background and white text
-  - Auto-adjusted column widths
-  - Cell borders and text wrapping
-  - Clean, readable layout
-- **Smart export**: Empty sheets are automatically removed
-- **Organized storage**: Files saved to `data/{platform}/` directory with timestamps
+- **Workbook nhiều sheet**: tách Contents, Comments, Creators
+- **Định dạng chuyên nghiệp**:
+  - Header nền xanh, chữ trắng
+  - Tự chỉnh độ rộng cột
+  - Viền ô và xuống dòng
+  - Bố cục dễ đọc
+- **Xuất thông minh**: sheet trống bị bỏ
+- **Lưu có tổ chức**: file vào `data/{platform}/` kèm timestamp
 
-## Installation
+## Cài đặt
 
-Excel export requires the `openpyxl` library:
+Xuất Excel cần thư viện `openpyxl`:
 
 ```bash
-# Using uv (recommended)
+# Dùng uv (khuyến nghị)
 uv sync
 
-# Or using pip
+# Hoặc pip
 pip install openpyxl
 ```
 
-## Usage
+## Cách dùng
 
-### Basic Usage
+### Cơ bản
 
-1. **Configure Excel export** in `config/base_config.py`:
+1. **Bật xuất Excel** trong `config/base_config.py`:
 
 ```python
-SAVE_DATA_OPTION = "excel"  # Change from jsonl/json/csv/db to excel
+SAVE_DATA_OPTION = "excel"  # Đổi từ jsonl/json/csv/db sang excel
 ```
 
-2. **Run the crawler**:
+2. **Chạy crawler**:
 
 ```bash
-# Xiaohongshu example
+# Ví dụ Xiaohongshu
 uv run main.py --platform xhs --lt qrcode --type search
 
-# Douyin example
+# Ví dụ Douyin
 uv run main.py --platform dy --lt qrcode --type search
 
-# Bilibili example
+# Ví dụ Bilibili
 uv run main.py --platform bili --lt qrcode --type search
 ```
 
-3. **Find your Excel file** in `data/{platform}/` directory:
-   - Filename format: `{platform}_{crawler_type}_{timestamp}.xlsx`
-   - Example: `xhs_search_20250128_143025.xlsx`
+3. **Tìm file Excel** trong `data/{platform}/`:
+   - Tên file: `{platform}_{crawler_type}_{timestamp}.xlsx`
+   - Ví dụ: `xhs_search_20250128_143025.xlsx`
 
-### Command Line Examples
+### Ví dụ dòng lệnh
 
 ```bash
-# Search by keywords and export to Excel
+# Tìm theo từ khóa, xuất Excel
 uv run main.py --platform xhs --lt qrcode --type search --save_data_option excel
 
-# Crawl specific posts and export to Excel
+# Crawl bài chỉ định, xuất Excel
 uv run main.py --platform xhs --lt qrcode --type detail --save_data_option excel
 
-# Crawl creator profile and export to Excel
+# Crawl trang creator, xuất Excel
 uv run main.py --platform xhs --lt qrcode --type creator --save_data_option excel
 ```
 
-## Excel File Structure
+## Cấu trúc file Excel
 
-### Contents Sheet
-Contains post/video information:
-- `note_id`: Unique post identifier
-- `title`: Post title
-- `desc`: Post description
-- `user_id`: Author user ID
-- `nickname`: Author nickname
-- `liked_count`: Number of likes
-- `comment_count`: Number of comments
-- `share_count`: Number of shares
-- `ip_location`: IP location
-- `image_list`: Comma-separated image URLs
-- `tag_list`: Comma-separated tags
-- `note_url`: Direct link to post
-- And more platform-specific fields...
+### Sheet Contents
+Thông tin bài/video:
+- `note_id`: ID bài
+- `title`: tiêu đề
+- `desc`: mô tả
+- `user_id`: ID tác giả
+- `nickname`: biệt danh
+- `liked_count`: lượt thích
+- `comment_count`: số comment
+- `share_count`: lượt chia sẻ
+- `ip_location`: vị trí IP
+- `image_list`: URL ảnh, cách nhau bằng dấu phẩy
+- `tag_list`: tag, cách nhau bằng dấu phẩy
+- `note_url`: link bài
+- Và các trường riêng từng nền tảng...
 
-### Comments Sheet
-Contains comment information:
-- `comment_id`: Unique comment identifier
-- `note_id`: Associated post ID
-- `content`: Comment text
-- `user_id`: Commenter user ID
-- `nickname`: Commenter nickname
-- `like_count`: Comment likes
-- `create_time`: Comment timestamp
-- `ip_location`: Commenter location
-- `sub_comment_count`: Number of replies
-- And more...
+### Sheet Comments
+Thông tin comment:
+- `comment_id`: ID comment
+- `note_id`: ID bài liên quan
+- `content`: nội dung
+- `user_id`: ID người comment
+- `nickname`: biệt danh
+- `like_count`: lượt thích comment
+- `create_time`: thời điểm
+- `ip_location`: vị trí
+- `sub_comment_count`: số trả lời
+- Và các trường khác...
 
-### Creators Sheet
-Contains creator/author information:
-- `user_id`: Unique user identifier
-- `nickname`: Display name
-- `gender`: Gender
-- `avatar`: Profile picture URL
-- `desc`: Bio/description
-- `fans`: Follower count
-- `follows`: Following count
-- `interaction`: Total interactions
-- And more...
+### Sheet Creators
+Thông tin creator:
+- `user_id`: ID người dùng
+- `nickname`: tên hiển thị
+- `gender`: giới tính
+- `avatar`: URL ảnh đại diện
+- `desc`: bio
+- `fans`: số follower
+- `follows`: số đang follow
+- `interaction`: tổng tương tác
+- Và các trường khác...
 
-## Advantages Over Other Formats
+## So với định dạng khác
 
-### vs CSV
-- ✅ Multiple sheets in one file
-- ✅ Professional formatting
-- ✅ Better handling of special characters
-- ✅ Auto-adjusted column widths
-- ✅ No encoding issues
+### So với CSV
+- Nhiều sheet trong một file
+- Có định dạng
+- Xử lý ký tự đặc biệt tốt hơn
+- Tự chỉnh độ rộng cột
+- Ít lỗi encoding
 
-### vs JSON
-- ✅ Human-readable tabular format
-- ✅ Easy to open in Excel/Google Sheets
-- ✅ Better for data analysis
-- ✅ Easier to share with non-technical users
+### So với JSON
+- Bảng dễ đọc
+- Mở được bằng Excel / Google Sheets
+- Thuận cho phân tích
+- Dễ chia sẻ với người không kỹ thuật
 
-### vs Database
-- ✅ No database setup required
-- ✅ Portable single-file format
-- ✅ Easy to share and archive
-- ✅ Works offline
+### So với database
+- Không cần cài DB
+- Một file, dễ mang đi
+- Dễ chia sẻ và lưu trữ
+- Dùng offline
 
-## Tips & Best Practices
+## Mẹo
 
-1. **Large datasets**: For very large crawls (>10,000 rows), consider using database storage instead for better performance
+1. **Dữ liệu lớn**: crawl > 10.000 dòng nên dùng database cho hiệu năng tốt hơn.
 
-2. **Data analysis**: Excel files work great with:
+2. **Phân tích**: file Excel dùng tốt với:
    - Microsoft Excel
    - Google Sheets
    - LibreOffice Calc
    - Python pandas: `pd.read_excel('file.xlsx')`
 
-3. **Combining data**: You can merge multiple Excel files using:
+3. **Gộp dữ liệu**:
+
    ```python
    import pandas as pd
    df1 = pd.read_excel('file1.xlsx', sheet_name='Contents')
@@ -150,37 +151,36 @@ Contains creator/author information:
    combined.to_excel('combined.xlsx', index=False)
    ```
 
-4. **File size**: Excel files are typically 2-3x larger than CSV but smaller than JSON
+4. **Dung lượng**: Excel thường lớn hơn CSV 2–3 lần nhưng nhỏ hơn JSON.
 
-## Troubleshooting
+## Xử lý sự cố
 
-### "openpyxl not installed" error
+### Lỗi "openpyxl not installed"
 
 ```bash
-# Install openpyxl
 uv add openpyxl
-# or
+# hoặc
 pip install openpyxl
 ```
 
-### Excel file not created
+### Không tạo được file Excel
 
-Check that:
-1. `SAVE_DATA_OPTION = "excel"` in config
-2. Crawler successfully collected data
-3. No errors in console output
-4. `data/{platform}/` directory exists
+Kiểm tra:
+1. `SAVE_DATA_OPTION = "excel"` trong config
+2. Crawler đã thu thập được dữ liệu
+3. Console không có lỗi
+4. Thư mục `data/{platform}/` tồn tại
 
-### Empty Excel file
+### File Excel trống
 
-This happens when:
-- No data was crawled (check keywords/IDs)
-- Login failed (check login status)
-- Platform blocked requests (check IP/rate limits)
+Thường vì:
+- Không crawl được dữ liệu (kiểm tra từ khóa/ID)
+- Đăng nhập thất bại
+- Nền tảng chặn request (IP / rate limit)
 
-## Example Output
+## Ví dụ output
 
-After running a successful crawl, you'll see:
+Sau khi crawl thành công:
 
 ```
 [ExcelStoreBase] Initialized Excel export to: data/xhs/xhs_search_20250128_143025.xlsx
@@ -190,55 +190,54 @@ After running a successful crawl, you'll see:
 [Main] Excel file saved successfully
 ```
 
-Your Excel file will have:
-- Professional blue headers
-- Clean borders
-- Wrapped text for long content
-- Auto-sized columns
-- Separate organized sheets
+File Excel sẽ có:
+- Header xanh
+- Viền rõ
+- Wrap text cho nội dung dài
+- Cột tự co
+- Sheet tách theo loại dữ liệu
 
-## Advanced Usage
+## Nâng cao
 
-### Programmatic Access
+### Gọi từ code
 
 ```python
 from store.excel_store_base import ExcelStoreBase
 
-# Create store
+# Tạo store
 store = ExcelStoreBase(platform="xhs", crawler_type="search")
 
-# Store data
+# Ghi dữ liệu
 await store.store_content({
     "note_id": "123",
     "title": "Test Post",
     "liked_count": 100
 })
 
-# Save to file
+# Lưu file
 store.flush()
 ```
 
-### Custom Formatting
+### Tùy chỉnh định dạng
 
-You can extend `ExcelStoreBase` to customize formatting:
+Kế thừa `ExcelStoreBase`:
 
 ```python
 from store.excel_store_base import ExcelStoreBase
 
 class CustomExcelStore(ExcelStoreBase):
     def _apply_header_style(self, sheet, row_num=1):
-        # Custom header styling
         super()._apply_header_style(sheet, row_num)
-        # Add your customizations here
+        # Thêm tùy chỉnh tại đây
 ```
 
-## Support
+## Hỗ trợ
 
-For issues or questions:
-- Check [常见问题](常见问题.md)
-- Open an issue on GitHub
-- Join the WeChat discussion group
+Khi gặp vấn đề:
+- Xem [Câu hỏi thường gặp](faq.md)
+- Mở issue trên GitHub
+- Tham gia nhóm WeChat
 
 ---
 
-**Note**: Excel export is designed for learning and research purposes. Please respect platform terms of service and rate limits.
+**Lưu ý**: Xuất Excel chỉ phục vụ học tập và nghiên cứu. Tôn trọng điều khoản nền tảng và giới hạn tần suất request.

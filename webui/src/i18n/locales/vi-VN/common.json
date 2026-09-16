@@ -1,0 +1,26 @@
+{
+  "status": {
+    "active": "ĐANG CHẠY",
+    "standby": "CHỜ",
+    "idle": "RẢNH",
+    "running": "ĐANG CHẠY",
+    "stopping": "ĐANG DỪNG",
+    "error": "LỖI"
+  },
+  "sidebar": {
+    "title": "Trend Radar",
+    "api": "API",
+    "local": "LOCAL",
+    "disclaimer": "Bạn tự chịu trách nhiệm vận hành sản phẩm",
+    "license": "License"
+  },
+  "action": {
+    "loading": "Đang tải...",
+    "skip": "BỎ QUA",
+    "retry": "THỬ LẠI"
+  },
+  "unit": {
+    "entries": "dòng",
+    "records": "bản ghi"
+  }
+}

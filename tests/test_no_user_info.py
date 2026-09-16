@@ -59,7 +59,8 @@ def test_content_tables_have_creator_hash():
                       "BilibiliVideo", "BilibiliVideoComment", "BilibiliUpDynamic",
                       "DouyinAweme", "DouyinAwemeComment", "KuaishouVideo",
                       "KuaishouVideoComment", "TiebaNote", "TiebaComment",
-                      "ZhihuContent", "ZhihuComment"]
+                      "ZhihuContent", "ZhihuComment",
+                      "TiktokAweme", "TiktokAwemeComment"]
     for t in content_tables:
         cols = {c.name for c in class_mapper(getattr(m, t)).columns}
         assert "creator_hash" in cols, f"{t} 缺少 creator_hash 列"

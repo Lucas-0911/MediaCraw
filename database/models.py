@@ -25,6 +25,7 @@
 # ZhihuCreator/BilibiliUpInfo/BilibiliContactInfo）已整体移除。
 
 from sqlalchemy import create_engine, Column, Integer, Text, String, BigInteger
+from sqlalchemy.types import Float as _SqlFloat
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -284,6 +285,107 @@ class ZhihuContent(Base):
     user_nickname = Column(Text, comment='用户昵称(已脱敏)')
     add_ts = Column(BigInteger, comment='添加时间戳')
     last_modify_ts = Column(BigInteger, comment='最后修改时间戳')
+
+class TiktokAweme(Base):
+    __tablename__ = 'tiktok_aweme'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    creator_hash = Column(String(64), index=True, comment='创作者匿名哈希')
+    nickname = Column(Text, comment='用户昵称(已脱敏)')
+    add_ts = Column(BigInteger, comment='添加时间戳')
+    last_modify_ts = Column(BigInteger, comment='最后修改时间戳')
+    aweme_id = Column(String(255), index=True, comment='作品ID')
+    aweme_type = Column(Text, comment='作品类型')
+    title = Column(Text, comment='作品标题')
+    desc = Column(Text, comment='作品描述')
+    create_time = Column(BigInteger, index=True, comment='创建时间戳')
+    liked_count = Column(Text, comment='点赞数')
+    comment_count = Column(Text, comment='评论数')
+    share_count = Column(Text, comment='分享数')
+    collected_count = Column(Text, comment='收藏数')
+    aweme_url = Column(Text, comment='作品URL')
+    cover_url = Column(Text, comment='封面URL')
+    video_download_url = Column(Text, comment='视频下载URL')
+    music_download_url = Column(Text, comment='音乐下载URL')
+    note_download_url = Column(Text, comment='笔记下载URL')
+    source_keyword = Column(Text, default='', comment='来源关键词')
+
+class TiktokAwemeComment(Base):
+    __tablename__ = 'tiktok_aweme_comment'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    creator_hash = Column(String(64), index=True, comment='创作者匿名哈希')
+    nickname = Column(Text, comment='用户昵称(已脱敏)')
+    add_ts = Column(BigInteger, comment='添加时间戳')
+    last_modify_ts = Column(BigInteger, comment='最后修改时间戳')
+    comment_id = Column(String(255), index=True, comment='评论ID')
+    aweme_id = Column(String(255), index=True, comment='作品ID')
+    content = Column(Text, comment='评论内容')
+    create_time = Column(BigInteger, comment='创建时间戳')
+    sub_comment_count = Column(Text, comment='子评论数')
+    parent_comment_id = Column(String(255), comment='父评论ID')
+    like_count = Column(Text, default='0', comment='点赞数')
+    pictures = Column(Text, default='', comment='图片')
+
+class TrendProduct(Base):
+    __tablename__ = 'trend_product'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    product_key = Column(String(255), nullable=False, unique=True, index=True, comment='SP key')
+    product_id = Column(String(255), index=True, comment='小黄车 product_id')
+    name = Column(Text, comment='Tên sản phẩm')
+    identity_type = Column(String(64), comment='xiaohuangche/hashtag/llm')
+    industry = Column(Text, comment='Keyword ngành')
+    confidence = Column(Integer, default=0, comment='Confidence 0-5')
+    heat_now = Column(_SqlFloat, default=0, comment='HeatNow')
+    heat_delta = Column(_SqlFloat, default=0, comment='HeatDelta')
+    label = Column(String(64), default='QUAN SAT', comment='Nhãn')
+    gates_json = Column(Text, default='{}', comment='Cổng AND')
+    last_alert_ts = Column(BigInteger, default=0, comment='Lần alert gần nhất')
+    updated_ts = Column(BigInteger, comment='Cập nhật')
+
+
+class TrendSnapshot(Base):
+    __tablename__ = 'trend_snapshot'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    product_key = Column(String(255), index=True, comment='SP key')
+    ts = Column(BigInteger, index=True, comment='Thời điểm snapshot')
+    play_velocity = Column(_SqlFloat, comment='play/h')
+    eng_velocity = Column(_SqlFloat, comment='eng/h')
+    mention_n = Column(Integer, comment='Số video')
+    spread = Column(Integer, comment='Số creator')
+    intent_n = Column(Integer, comment='Comment mua')
+    intent_wilson = Column(_SqlFloat, comment='Wilson intent')
+    heat_now = Column(_SqlFloat, comment='HeatNow')
+    search_cn = Column(String(32), comment='Google Trends CN')
+
+
+class TrendVideo(Base):
+    __tablename__ = 'trend_video'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    aweme_id = Column(String(255), index=True, comment='Video ID')
+    platform = Column(String(32), index=True, comment='dy/tiktok')
+    product_key = Column(String(255), index=True, comment='SP key')
+    creator_hash = Column(String(64), comment='Creator hash')
+    play_count = Column(Integer, default=0, comment='Play')
+    like_count = Column(Integer, default=0, comment='Like')
+    comment_count = Column(Integer, default=0, comment='Comment')
+    share_count = Column(Integer, default=0, comment='Share')
+    create_time = Column(BigInteger, comment='Thời điểm đăng')
+    url = Column(Text, comment='URL video')
+    download_url = Column(Text, comment='URL mp4')
+    desc = Column(Text, comment='Mô tả')
+    source_keyword = Column(Text, comment='Keyword')
+    last_play_count = Column(Integer, default=0, comment='Play snapshot trước')
+    local_media_path = Column(Text, comment='File mp4 local')
+    updated_ts = Column(BigInteger, comment='Cập nhật')
+
+
+class TrendAlert(Base):
+    __tablename__ = 'trend_alert'
+    id = Column(Integer, primary_key=True, comment='主键ID')
+    product_key = Column(String(255), index=True, comment='SP key')
+    ts = Column(BigInteger, comment='Thời điểm')
+    confidence = Column(Integer, comment='Confidence')
+    payload_json = Column(Text, comment='Nội dung Telegram')
+
 
 class ZhihuComment(Base):
     __tablename__ = 'zhihu_comment'

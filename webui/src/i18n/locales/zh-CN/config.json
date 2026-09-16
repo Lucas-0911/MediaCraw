@@ -34,6 +34,7 @@
       "dy": "示例:\n7525538910311632128\nhttps://www.douyin.com/video/xxx\nhttps://v.douyin.com/xxx (短链接)",
       "wb": "示例:\n4982041758140155\nhttps://weibo.com/xxx/xxx",
       "ks": "示例:\n3xf8enb8dbj6uig\nhttps://www.kuaishou.com/short-video/xxx",
+      "tiktok": "示例:\n7123456789012345678\nhttps://www.tiktok.com/@user/video/xxx\nhttps://vt.tiktok.com/xxx",
       "default": "输入帖子/视频 ID 或 URL..."
     },
     "creatorIds": "创作者 ID",
@@ -44,6 +45,7 @@
       "dy": "示例:\nMS4wLjABAAAAxxx\nhttps://www.douyin.com/user/MS4wLjABAAAAxxx",
       "wb": "示例:\n5533390220\nhttps://weibo.com/u/5533390220",
       "ks": "示例:\n3x84qugg4ch9zhs\nhttps://www.kuaishou.com/profile/xxx",
+      "tiktok": "示例:\ntiktok\nhttps://www.tiktok.com/@username",
       "default": "输入创作者 ID 或 URL..."
     },
     "loginMethod": "登录方式",
@@ -56,16 +58,22 @@
     "commentExtraction": "评论抓取",
     "subComments": "子评论",
     "headlessMode": "无头模式",
-    "headlessModeHint": "无 GUI 运行浏览器"
+    "headlessModeHint": "无 GUI 运行浏览器",
+    "maxNotes": "最大条数",
+    "maxNotesHint": "每次最多抓取的视频/帖子数",
+    "maxComments": "每条评论数",
+    "maxCommentsHint": "每条帖子最多抓取的评论数"
   },
   "button": {
     "initiateScan": "开始爬虫",
     "initiating": "启动中...",
     "terminate": "终止",
-    "stopping": "停止中..."
+    "openConsole": "系统控制台"
   },
   "warning": {
     "cookieSlider": "[提示] 小红书和抖音平台不建议使用 Cookie 登录，因为可能会触发滑块验证",
-    "xhsToken": "[重要] 小红书 URL 必须包含 xsec_token 参数，请从浏览器复制完整 URL"
+    "tiktokGuest": "[TikTok VN] 默认游客模式，无需登录。请输入越南语关键词（如 ẩm thực, du lịch）。",
+    "xhsToken": "[重要] 小红书 URL 必须包含 xsec_token 参数，请从浏览器复制完整 URL",
+    "dyHint": "[抖音] 主热度源。请开启评论以便购买意图闸门生效。"
   }
 }

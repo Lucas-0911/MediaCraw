@@ -1,7 +1,7 @@
 import type { ComponentType, ReactNode, KeyboardEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Database, Globe, KeyRound, MessageSquare, Play, Square, X } from 'lucide-react'
+import { Database, Globe, KeyRound, MessageSquare, Play, Square, TerminalSquare, X } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -69,25 +69,32 @@ function Field({ label, hint, children }: FieldProps) {
 type KeywordInputProps = {
   value: string
   onChange: (value: string) => void
+  draft: string
+  onDraftChange: (value: string) => void
   placeholder?: string
   disabled?: boolean
 }
 
-function KeywordInput({ value, onChange, placeholder, disabled }: KeywordInputProps) {
-  const [inputValue, setInputValue] = useState('')
+function mergeKeywords(stored: string, draft: string): string {
+  const list = stored ? stored.split(',').map((k) => k.trim()).filter(Boolean) : []
+  const extra = draft.trim()
+  if (extra && !list.includes(extra)) list.push(extra)
+  return list.join(',')
+}
 
-  // 将逗号分隔的字符串转换为数组
+function KeywordInput({ value, onChange, draft, onDraftChange, placeholder, disabled }: KeywordInputProps) {
   const keywords = value ? value.split(',').map((k) => k.trim()).filter(Boolean) : []
 
+  const commitDraft = () => {
+    const merged = mergeKeywords(value, draft)
+    if (merged !== value) onChange(merged)
+    if (draft) onDraftChange('')
+  }
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault()
-      const trimmed = inputValue.trim()
-      if (trimmed && !keywords.includes(trimmed)) {
-        const newKeywords = [...keywords, trimmed]
-        onChange(newKeywords.join(','))
-        setInputValue('')
-      }
+      commitDraft()
     }
   }
 
@@ -99,9 +106,10 @@ function KeywordInput({ value, onChange, placeholder, disabled }: KeywordInputPr
   return (
     <div className="space-y-2">
       <Input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={draft}
+        onChange={(e) => onDraftChange(e.target.value)}
         onKeyDown={handleKeyDown}
+        onBlur={commitDraft}
         placeholder={placeholder}
         disabled={disabled}
         className="h-9 text-xs"
@@ -136,18 +144,27 @@ export function CrawlerConfigPanel() {
   const config = useCrawlerStore((state) => state.config)
   const updateConfig = useCrawlerStore((state) => state.updateConfig)
   const status = useCrawlerStore((state) => state.status)
+  const logs = useCrawlerStore((state) => state.logs)
+  const consoleOpen = useCrawlerStore((state) => state.consoleOpen)
+  const setConsoleOpen = useCrawlerStore((state) => state.setConsoleOpen)
 
   const { data: platforms } = usePlatforms()
   const { data: options } = useConfigOptions()
   const { mutate: startCrawler, isPending: isStarting } = useStartCrawler()
   const { mutate: stopCrawler, isPending: isStopping } = useStopCrawler()
 
+  const [keywordDraft, setKeywordDraft] = useState('')
+
   const isDisabled = status === 'running' || status === 'stopping'
   const isRunning = status === 'running'
   const isBusy = isStarting || isStopping || status === 'stopping'
 
   const handleStart = () => {
-    startCrawler(config)
+    const keywords = mergeKeywords(config.keywords, keywordDraft)
+    updateConfig({ keywords })
+    setKeywordDraft('')
+    setConsoleOpen(true)
+    startCrawler({ ...config, keywords })
   }
 
   const handleStop = () => {
@@ -183,6 +200,18 @@ export function CrawlerConfigPanel() {
             </Select>
           </Field>
 
+          {config.platform === 'tiktok' && (
+            <div className="rounded-lg border border-cyber-neon-cyan/30 bg-cyber-neon-cyan/5 p-2 text-[10px] leading-snug text-cyber-neon-cyan font-mono">
+              {t('warning.tiktokGuest')}
+            </div>
+          )}
+
+          {config.platform === 'dy' && (
+            <div className="rounded-lg border border-cyber-neon-cyan/30 bg-cyber-neon-cyan/5 p-2 text-[10px] leading-snug text-cyber-neon-cyan font-mono">
+              {t('warning.dyHint')}
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-3">
             <Field label={t('field.crawlType')}>
               <Select
@@ -215,6 +244,31 @@ export function CrawlerConfigPanel() {
             </Field>
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t('field.maxNotes')} hint={t('field.maxNotesHint')}>
+              <Input
+                type="number"
+                min={1}
+                max={10000}
+                value={config.max_notes_count}
+                onChange={(e) => updateConfig({ max_notes_count: Math.max(1, parseInt(e.target.value) || 1) })}
+                disabled={isDisabled}
+                className="h-9 text-xs"
+              />
+            </Field>
+            <Field label={t('field.maxComments')} hint={t('field.maxCommentsHint')}>
+              <Input
+                type="number"
+                min={1}
+                max={10000}
+                value={config.max_comments_count}
+                onChange={(e) => updateConfig({ max_comments_count: Math.max(1, parseInt(e.target.value) || 1) })}
+                disabled={isDisabled}
+                className="h-9 text-xs"
+              />
+            </Field>
+          </div>
+
           {/* 根据爬虫类型显示不同的输入框 */}
           {config.crawler_type === 'search' && (
             <Field label={t('field.keywords')} hint={t('field.keywordsHint')}>
@@ -222,6 +276,8 @@ export function CrawlerConfigPanel() {
                 placeholder={t('field.keywordsPlaceholder')}
                 value={config.keywords}
                 onChange={(keywords) => updateConfig({ keywords })}
+                draft={keywordDraft}
+                onDraftChange={setKeywordDraft}
                 disabled={isDisabled}
               />
             </Field>
@@ -389,12 +445,12 @@ export function CrawlerConfigPanel() {
       </div>
 
       {/* Row 2: Start/Stop Button - Full Width */}
-      <div className="w-full">
+      <div className="w-full flex flex-col sm:flex-row gap-3">
         {isRunning ? (
           <Button
             onClick={handleStop}
             disabled={isBusy}
-            className="w-full h-12 bg-cyber-neon-pink text-white font-mono font-bold text-sm tracking-wider hover:bg-cyber-neon-pink/90 hover:shadow-glow-pink-sm transition-all"
+            className="flex-1 h-12 bg-cyber-neon-pink text-white font-mono font-bold text-sm tracking-wider hover:bg-cyber-neon-pink/90 hover:shadow-glow-pink-sm transition-all"
           >
             <Square className="w-4 h-4" />
             {isStopping ? t('button.stopping') : t('button.terminate')}
@@ -403,10 +459,21 @@ export function CrawlerConfigPanel() {
           <Button
             onClick={handleStart}
             disabled={isBusy}
-            className="w-full h-12 bg-cyber-neon-cyan text-cyber-bg-primary font-mono font-bold text-sm tracking-wider hover:bg-cyber-neon-cyan/90 hover:shadow-glow-cyan-sm transition-all"
+            className="flex-1 h-12 bg-cyber-neon-cyan text-cyber-bg-primary font-mono font-bold text-sm tracking-wider hover:bg-cyber-neon-cyan/90 hover:shadow-glow-cyan-sm transition-all"
           >
             <Play className="w-4 h-4" />
             {isStarting ? t('button.initiating') : t('button.initiateScan')}
+          </Button>
+        )}
+        {(isRunning || logs.length > 0) && !consoleOpen && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setConsoleOpen(true)}
+            className="h-12 px-5 font-mono font-bold text-sm tracking-wider"
+          >
+            <TerminalSquare className="w-4 h-4" />
+            {t('button.openConsole')}
           </Button>
         )}
       </div>

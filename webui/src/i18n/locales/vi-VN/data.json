@@ -1,0 +1,29 @@
+{
+  "dialog": {
+    "button": "DỮ LIỆU",
+    "title": "EXPLORER"
+  },
+  "explorer": {
+    "title": "FILE ĐÃ CRAWL",
+    "records": "{{count}} BẢN GHI",
+    "rescan": "TẢI LẠI",
+    "loading": "[LOADING] Đang quét thư mục...",
+    "noData": "CHƯA CÓ DỮ LIỆU",
+    "noDataHint": "Chạy crawl xong file sẽ hiện ở đây.",
+    "allCategories": "TẤT CẢ"
+  },
+  "file": {
+    "entries": "{{count}} dòng",
+    "extract": "TẢI",
+    "preview": "XEM"
+  },
+  "preview": {
+    "title": "Xem dữ liệu",
+    "records": "{{count}} BẢN GHI",
+    "download": "TẢI VỀ",
+    "loading": "[LOADING] Đang đọc...",
+    "error": "[ERROR] Không đọc được file",
+    "searchPlaceholder": "Tìm trong dữ liệu...",
+    "showing": "Hiện {{filtered}} / {{total}}"
+  }
+}

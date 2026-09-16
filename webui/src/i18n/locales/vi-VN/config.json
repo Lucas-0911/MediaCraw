@@ -1,0 +1,79 @@
+{
+  "section": {
+    "targetMatrix": {
+      "title": "MỤC TIÊU",
+      "description": "Nền tảng, mode và từ khóa"
+    },
+    "authMatrix": {
+      "title": "ĐĂNG NHẬP",
+      "description": "QR hoặc cookie"
+    },
+    "outputConfig": {
+      "title": "ĐẦU RA",
+      "description": "Định dạng lưu và comment"
+    },
+    "runtime": {
+      "title": "CHẠY",
+      "description": "Tham số runtime"
+    }
+  },
+  "field": {
+    "platform": "NỀN TẢNG",
+    "platformPlaceholder": "Chọn nền tảng",
+    "crawlType": "KIỂU CRAWL",
+    "crawlTypePlaceholder": "Chọn kiểu",
+    "startPage": "TRANG BẮT ĐẦU",
+    "keywords": "TỪ KHÓA",
+    "keywordsHint": "Enter để thêm từ khóa. Douyin: ngành tiếng Trung, ví dụ 美白精华",
+    "keywordsPlaceholder": "Gõ từ khóa, Enter để thêm... Douyin: 美白精华, 护肝片",
+    "maxNotes": "SỐ BÀI",
+    "maxNotesHint": "Số video/bài tối đa mỗi lần crawl",
+    "maxComments": "SỐ COMMENT/BÀI",
+    "maxCommentsHint": "Số comment tối đa mỗi bài",
+    "specifiedIds": "ID BÀI/VIDEO",
+    "specifiedIdsHint": "ID hoặc URL, mỗi dòng một mục",
+    "specifiedIdsPlaceholder": {
+      "bili": "Ví dụ:\nBV1xxxx\nhttps://www.bilibili.com/video/BV1xxxx",
+      "xhs": "Ví dụ:\nhttps://www.xiaohongshu.com/explore/xxx?xsec_token=xxx",
+      "dy": "Ví dụ:\n7525538910311632128\nhttps://www.douyin.com/video/xxx",
+      "wb": "Ví dụ:\n4982041758140155",
+      "ks": "Ví dụ:\n3xf8enb8dbj6uig",
+      "tiktok": "Ví dụ:\n7123456789012345678\nhttps://www.tiktok.com/@user/video/xxx",
+      "default": "Nhập ID hoặc URL..."
+    },
+    "creatorIds": "ID TÁC GIẢ",
+    "creatorIdsHint": "ID/URL trang tác giả",
+    "creatorIdsPlaceholder": {
+      "bili": "Ví dụ:\n434377496",
+      "xhs": "URL profile có xsec_token",
+      "dy": "Ví dụ:\nMS4wLjABAAAAxxx",
+      "wb": "Ví dụ:\n5533390220",
+      "ks": "ID profile Kuaishou",
+      "tiktok": "Ví dụ:\nhttps://www.tiktok.com/@username",
+      "default": "Nhập ID hoặc URL tác giả..."
+    },
+    "loginMethod": "CÁCH ĐĂNG NHẬP",
+    "loginMethodPlaceholder": "Chọn cách đăng nhập",
+    "cookies": "COOKIES",
+    "cookiesHint": "Dán chuỗi cookie",
+    "cookiesPlaceholder": "Dán cookies...",
+    "saveFormat": "ĐỊNH DẠNG LƯU",
+    "saveFormatPlaceholder": "Chọn định dạng",
+    "commentExtraction": "Lấy comment",
+    "subComments": "Comment cấp 2",
+    "headlessMode": "HEADLESS",
+    "headlessModeHint": "Ẩn cửa sổ trình duyệt"
+  },
+  "button": {
+    "initiateScan": "BẮT ĐẦU CRAWL",
+    "initiating": "ĐANG CHẠY...",
+    "terminate": "DỪNG",
+    "openConsole": "CONSOLE"
+  },
+  "warning": {
+    "cookieSlider": "[Lưu ý] Xiaohongshu/Douyin không nên login cookie vì dễ kẹt captcha",
+    "tiktokGuest": "[TikTok VN] Mặc định guest, không cần tài khoản. Gõ từ khóa tiếng Việt.",
+    "xhsToken": "[Quan trọng] URL Xiaohongshu phải có xsec_token",
+    "dyHint": "[Douyin] Nguồn nhiệt chính. Bật comment để cổng intent mua hoạt động."
+  }
+}

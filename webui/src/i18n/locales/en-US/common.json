@@ -8,10 +8,10 @@
     "error": "ERROR"
   },
   "sidebar": {
-    "title": "MediaCrawler",
+    "title": "Trend Radar",
     "api": "API",
     "local": "LOCAL",
-    "disclaimer": "For personal learning only, commercial use prohibited",
+    "disclaimer": "You operate this product under your own responsibility",
     "license": "License"
   },
   "action": {

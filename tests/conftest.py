@@ -29,6 +29,15 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 
+@pytest.fixture(autouse=True)
+def _trend_isolated_files(tmp_path, monkeypatch):
+    monkeypatch.setenv("TREND_DB_PATH", str(tmp_path / "trend.sqlite"))
+    monkeypatch.setenv("TREND_SETTINGS_PATH", str(tmp_path / "trend_settings.json"))
+    monkeypatch.setenv("TREND_GOOGLE_TRENDS_ENABLED", "false")
+    monkeypatch.setenv("TREND_LLM_ENABLED", "false")
+    monkeypatch.setenv("TREND_SCHEDULER_ENABLED", "false")
+
+
 @pytest.fixture(scope="session")
 def project_root_path():
     """Return project root path"""

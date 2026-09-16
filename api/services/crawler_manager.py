@@ -212,8 +212,8 @@ class CrawlerManager:
         cmd.extend(["--save_data_option", config.save_option.value])
 
         # Pass different arguments based on crawler type
-        if config.crawler_type.value == "search" and config.keywords:
-            cmd.extend(["--keywords", config.keywords])
+        if config.crawler_type.value == "search":
+            cmd.extend(["--keywords", config.keywords or ""])
         elif config.crawler_type.value == "detail" and config.specified_ids:
             cmd.extend(["--specified_id", config.specified_ids])
         elif config.crawler_type.value == "creator" and config.creator_ids:

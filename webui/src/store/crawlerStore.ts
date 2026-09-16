@@ -15,6 +15,9 @@ interface CrawlerState {
   // Config
   config: CrawlerConfig
 
+  // Console popup
+  consoleOpen: boolean
+
   // Actions
   setStatus: (status: CrawlerState['status']) => void
   setRunningInfo: (platform: string | null, crawlerType: string | null, startedAt: string | null) => void
@@ -23,6 +26,7 @@ interface CrawlerState {
   clearLogs: () => void
   restoreLogs: () => void
   updateConfig: (config: Partial<CrawlerConfig>) => void
+  setConsoleOpen: (open: boolean) => void
   reset: () => void
 }
 
@@ -47,7 +51,7 @@ function saveClearedLogIdToStorage(id: number | null): void {
 }
 
 const defaultConfig: CrawlerConfig = {
-  platform: 'bili',
+  platform: 'dy',
   login_type: 'qrcode',
   crawler_type: 'search',
   keywords: '',
@@ -56,9 +60,11 @@ const defaultConfig: CrawlerConfig = {
   start_page: 1,
   enable_comments: true,
   enable_sub_comments: false,
-  save_option: 'json',
+  save_option: 'jsonl',
   cookies: '',
   headless: false,
+  max_notes_count: 15,
+  max_comments_count: 10,
 }
 
 export const useCrawlerStore = create<CrawlerState>((set, get) => ({
@@ -69,6 +75,7 @@ export const useCrawlerStore = create<CrawlerState>((set, get) => ({
   logs: [],
   clearedAfterLogId: getClearedLogIdFromStorage(), // 从 localStorage 初始化
   config: defaultConfig,
+  consoleOpen: false,
 
   setStatus: (status) => {
     set({ status })
@@ -143,11 +150,14 @@ export const useCrawlerStore = create<CrawlerState>((set, get) => ({
       config: { ...state.config, ...config },
     })),
 
+  setConsoleOpen: (open) => set({ consoleOpen: open }),
+
   reset: () =>
     set({
       status: 'idle',
       platform: null,
       crawlerType: null,
       startedAt: null,
+      consoleOpen: false,
     }),
 }))

@@ -9,17 +9,25 @@ import {
 } from '@/components/ui/select'
 
 const languages = [
-  { code: 'zh-CN', label: '中文' },
+  { code: 'vi-VN', label: 'VI' },
   { code: 'en-US', label: 'EN' },
+  { code: 'zh-CN', label: '中文' },
 ]
+
+function resolveLang(lng: string) {
+  if (lng.startsWith('vi')) return 'vi-VN'
+  if (lng.startsWith('zh')) return 'zh-CN'
+  if (lng.startsWith('en')) return 'en-US'
+  return 'vi-VN'
+}
 
 export function LanguageSwitch() {
   const { i18n } = useTranslation()
-
-  const currentLang = languages.find(l => l.code === i18n.language) || languages[0]
+  const currentCode = resolveLang(i18n.language || 'vi-VN')
+  const currentLang = languages.find((l) => l.code === currentCode) || languages[0]
 
   return (
-    <Select value={i18n.language} onValueChange={(lang) => i18n.changeLanguage(lang)}>
+    <Select value={currentCode} onValueChange={(lang) => i18n.changeLanguage(lang)}>
       <SelectTrigger className="w-20 h-7 text-xs font-mono border-cyber-border-subtle bg-cyber-bg-tertiary/50 hover:border-cyber-neon-cyan/50 transition-colors">
         <Globe className="w-3 h-3 mr-1 text-cyber-text-secondary" />
         <SelectValue>{currentLang.label}</SelectValue>

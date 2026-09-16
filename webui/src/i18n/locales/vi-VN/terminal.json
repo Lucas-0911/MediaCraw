@@ -1,0 +1,16 @@
+{
+  "header": {
+    "title": "CONSOLE",
+    "entries": "{{count}} dòng",
+    "active": "ĐANG CHẠY",
+    "clear": "XÓA",
+    "close": "ĐÓNG"
+  },
+  "banner": {
+    "systemInit": "[SYS] Sẵn sàng",
+    "scanningHint": "[INFO] Crawl đang chạy. Log hiện realtime."
+  },
+  "footer": {
+    "awaiting": "chờ lệnh..."
+  }
+}

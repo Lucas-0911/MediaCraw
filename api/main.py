@@ -25,6 +25,7 @@ import asyncio
 import os
 import sys
 import subprocess
+from contextlib import asynccontextmanager
 from pathlib import Path
 import uvicorn
 from fastapi import FastAPI
@@ -32,15 +33,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from .routers import crawler_router, data_router, websocket_router
+from .routers import crawler_router, data_router, websocket_router, trend_router
 
 # Project root directory (used for running subprocesses like uv run main.py)
 PROJECT_ROOT = Path(__file__).parent.parent
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from trend.scheduler import start_scheduler, stop_scheduler
+    await start_scheduler()
+    yield
+    await stop_scheduler()
+
+
 app = FastAPI(
     title="MediaCrawler WebUI API",
     description="API for controlling MediaCrawler from WebUI",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Get webui static files directory
@@ -64,6 +75,7 @@ app.add_middleware(
 app.include_router(crawler_router, prefix="/api")
 app.include_router(data_router, prefix="/api")
 app.include_router(websocket_router, prefix="/api")
+app.include_router(trend_router, prefix="/api")
 
 
 @app.get("/")
@@ -159,6 +171,7 @@ async def get_platforms():
             {"value": "wb", "label": "Weibo", "icon": "message-circle"},
             {"value": "tieba", "label": "Baidu Tieba", "icon": "messages-square"},
             {"value": "zhihu", "label": "Zhihu", "icon": "help-circle"},
+            {"value": "tiktok", "label": "TikTok (VN)", "icon": "music"},
         ]
     }
 

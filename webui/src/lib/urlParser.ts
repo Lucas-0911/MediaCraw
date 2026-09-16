@@ -59,6 +59,16 @@ const platformPatterns: Record<string, {
       /kuaishou\.com\/profile\/([a-zA-Z0-9_-]+)/,
     ],
   },
+  tiktok: {
+    video: [
+      /tiktok\.com\/@[^/?#]+\/video\/(\d+)/,
+      /tiktok\.com\/video\/(\d+)/,
+      /v[mt]\.tiktok\.com\/([a-zA-Z0-9]+)/,
+    ],
+    creator: [
+      /tiktok\.com\/@([^/?#]+)/,
+    ],
+  },
 }
 
 export function parseUrl(input: string, platform: string): ParsedId {

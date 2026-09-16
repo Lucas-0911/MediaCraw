@@ -4,11 +4,11 @@
     "entries": "{{count}} entries",
     "active": "ACTIVE",
     "clear": "CLEAR",
-    "restore": "RESTORE ALL LOGS"
+    "close": "CLOSE"
   },
   "banner": {
     "systemInit": "[SYS] System initialized successfully",
-    "configHint": "[INFO] Configure parameters and initiate scan sequence..."
+    "scanningHint": "[INFO] Scan running. Logs stream here in real time."
   },
   "footer": {
     "awaiting": "awaiting_command..."

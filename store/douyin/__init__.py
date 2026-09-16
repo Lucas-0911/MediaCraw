@@ -181,6 +181,11 @@ async def update_douyin_aweme(aweme_item: Dict):
     }
     utils.logger.info(f"[store.douyin.update_douyin_aweme] douyin aweme id:{aweme_id}, title:{save_content_item.get('title')}")
     await DouyinStoreFactory.create_store().store_content(content_item=save_content_item)
+    try:
+        from trend.ingest import ingest_aweme
+        await ingest_aweme("dy", aweme_item, save_content_item)
+    except Exception as exc:
+        utils.logger.warning(f"[store.douyin] trend ingest aweme failed: {exc}")
 
 
 async def batch_update_dy_aweme_comments(aweme_id: str, comments: List[Dict]):
@@ -214,6 +219,11 @@ async def update_dy_aweme_comment(aweme_id: str, comment_item: Dict):
     utils.logger.info(f"[store.douyin.update_dy_aweme_comment] douyin aweme comment: {comment_id}, content: {save_comment_item.get('content')}")
 
     await DouyinStoreFactory.create_store().store_comment(comment_item=save_comment_item)
+    try:
+        from trend.ingest import ingest_comment
+        await ingest_comment("dy", aweme_id, comment_item, save_comment_item)
+    except Exception as exc:
+        utils.logger.warning(f"[store.douyin] trend ingest comment failed: {exc}")
 
 
 async def save_creator(user_id: str, creator: Dict):

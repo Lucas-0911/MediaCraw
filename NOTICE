@@ -1,0 +1,19 @@
+NOTICE
+
+This product includes code derived from MediaCrawler:
+
+  Copyright (c) 2024-2025 relakkes@gmail.com
+  https://github.com/NanmiCoder/MediaCrawler
+  Originally licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
+
+The original MediaCrawler license restricted commercial use. The current
+repository owner has chosen to operate this fork as their own product and
+accepts that legal/compliance risk. This NOTICE is retained to credit the
+upstream authors and preserve the original copyright identification.
+
+Original MediaCrawler license text (for attribution):
+
+NON-COMMERCIAL LEARNING LICENSE 1.1
+Copyright (c) [2024] [relakkes@gmail.com]
+The Software was originally limited to learning and research purposes.
+See the historical LICENSE of the upstream project for the full terms.
