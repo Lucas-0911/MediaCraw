@@ -2,13 +2,6 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-import zhCommon from './locales/zh-CN/common.json'
-import zhConfig from './locales/zh-CN/config.json'
-import zhTerminal from './locales/zh-CN/terminal.json'
-import zhData from './locales/zh-CN/data.json'
-import zhEnv from './locales/zh-CN/env.json'
-import zhTrend from './locales/zh-CN/trend.json'
-
 import enCommon from './locales/en-US/common.json'
 import enConfig from './locales/en-US/config.json'
 import enTerminal from './locales/en-US/terminal.json'
@@ -23,31 +16,29 @@ import viData from './locales/vi-VN/data.json'
 import viEnv from './locales/vi-VN/env.json'
 import viTrend from './locales/vi-VN/trend.json'
 
+const vi = {
+  common: viCommon,
+  config: viConfig,
+  terminal: viTerminal,
+  data: viData,
+  env: viEnv,
+  trend: viTrend,
+}
+
+const en = {
+  common: enCommon,
+  config: enConfig,
+  terminal: enTerminal,
+  data: enData,
+  env: enEnv,
+  trend: enTrend,
+}
+
 const resources = {
-  'vi-VN': {
-    common: viCommon,
-    config: viConfig,
-    terminal: viTerminal,
-    data: viData,
-    env: viEnv,
-    trend: viTrend,
-  },
-  'zh-CN': {
-    common: zhCommon,
-    config: zhConfig,
-    terminal: zhTerminal,
-    data: zhData,
-    env: zhEnv,
-    trend: zhTrend,
-  },
-  'en-US': {
-    common: enCommon,
-    config: enConfig,
-    terminal: enTerminal,
-    data: enData,
-    env: enEnv,
-    trend: enTrend,
-  },
+  'vi-VN': vi,
+  vi,
+  'en-US': en,
+  en,
 }
 
 i18n
@@ -56,13 +47,13 @@ i18n
   .init({
     resources,
     fallbackLng: 'vi-VN',
-    lng: undefined,
-    supportedLngs: ['vi-VN', 'en-US', 'zh-CN'],
-    nonExplicitSupportedLngs: true,
-    load: 'currentOnly',
+    supportedLngs: ['vi-VN', 'vi', 'en-US', 'en'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
     },
     detection: {
       order: ['localStorage', 'navigator'],

@@ -2,7 +2,7 @@
 
 WebUI cấu hình crawler, xem log realtime, duyệt file dữ liệu, và chạy **Trend Radar** (xếp hạng sản phẩm hot TQ + Telegram). Backend FastAPI spawn subprocess `uv run python main.py`; frontend React nhận log qua WebSocket.
 
-Màn hình chính mặc định là tab **TREND_RADAR**. Ngôn ngữ mặc định: **tiếng Việt** (VI / EN / 中文). Người vận hành tự chịu trách nhiệm về điều khoản nền tảng và dữ liệu. License: [LICENSE](../LICENSE).
+Màn hình chính mặc định là tab **TREND_RADAR**. Ngôn ngữ mặc định: **tiếng Việt** (VI / EN). Người vận hành tự chịu trách nhiệm về điều khoản nền tảng và dữ liệu. License: [LICENSE](../LICENSE).
 
 ---
 
@@ -70,7 +70,7 @@ Không có modal license học tập. Chỉ còn:
 1. **Environment check** — gọi `GET /api/env/check` (chạy `uv run main.py --help`). Thành công thì đóng sau ~1,5 giây. Fail thì xem lỗi hoặc **Skip**.
 2. Màn hình chính: tab **TREND_RADAR** (mặc định) rồi **CRAWL**.
 
-Đổi ngôn ngữ (VI / EN / 中文) và theme ở góc phải header.
+Đổi ngôn ngữ (VI / EN) và theme ở góc phải header.
 
 ---
 

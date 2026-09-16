@@ -1,44 +1,46 @@
 import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
 const languages = [
   { code: 'vi-VN', label: 'VI' },
   { code: 'en-US', label: 'EN' },
-  { code: 'zh-CN', label: '中文' },
 ]
 
 function resolveLang(lng: string) {
-  if (lng.startsWith('vi')) return 'vi-VN'
-  if (lng.startsWith('zh')) return 'zh-CN'
   if (lng.startsWith('en')) return 'en-US'
   return 'vi-VN'
 }
 
 export function LanguageSwitch() {
   const { i18n } = useTranslation()
-  const currentCode = resolveLang(i18n.language || 'vi-VN')
-  const currentLang = languages.find((l) => l.code === currentCode) || languages[0]
+  const currentCode = resolveLang(i18n.resolvedLanguage || i18n.language || 'vi-VN')
+
+  const switchTo = (lang: string) => {
+    void i18n.changeLanguage(lang)
+    localStorage.setItem('mediacrawler_language', lang)
+  }
 
   return (
-    <Select value={currentCode} onValueChange={(lang) => i18n.changeLanguage(lang)}>
-      <SelectTrigger className="w-20 h-7 text-xs font-mono border-cyber-border-subtle bg-cyber-bg-tertiary/50 hover:border-cyber-neon-cyan/50 transition-colors">
-        <Globe className="w-3 h-3 mr-1 text-cyber-text-secondary" />
-        <SelectValue>{currentLang.label}</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
+    <div className="flex items-center gap-1">
+      <Globe className="w-3 h-3 text-cyber-text-secondary" />
+      <div className="flex items-center rounded-md border border-cyber-border-subtle bg-cyber-bg-tertiary/50 overflow-hidden">
         {languages.map((lang) => (
-          <SelectItem key={lang.code} value={lang.code} className="text-xs font-mono">
+          <button
+            key={lang.code}
+            type="button"
+            onClick={() => switchTo(lang.code)}
+            className={cn(
+              'h-7 px-2 text-[10px] font-mono transition-colors',
+              currentCode === lang.code
+                ? 'bg-cyber-neon-cyan/20 text-cyber-neon-cyan'
+                : 'text-cyber-text-secondary hover:text-cyber-text-primary hover:bg-cyber-bg-tertiary'
+            )}
+          >
             {lang.label}
-          </SelectItem>
+          </button>
         ))}
-      </SelectContent>
-    </Select>
+      </div>
+    </div>
   )
 }
