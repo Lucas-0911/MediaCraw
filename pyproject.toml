@@ -1,8 +1,8 @@
 [project]
-name = "mediacrawler"
-author = "程序员阿江-Relakkes <relakkes@gmail.com>"
+name = "trendradar"
+authors = [{ name = "Trend Radar product owner" }]
 version = "0.1.0"
-description = "A social media crawler project, support Xiaohongshu, Weibo, Zhihu, Bilibili, Douyin, BaiduTieBa etc."
+description = "Trend Radar: agent-orchestrated social crawl, trend scoring, and Telegram ops."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

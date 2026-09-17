@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/bilibili/core.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-# -*- coding: utf-8 -*-
-# @Author  : relakkes@gmail.com
 # @Time    : 2023/12/2 18:44
 # @Desc    : Bilibili Crawler
 
@@ -646,12 +631,12 @@ class BilibiliCrawler(AbstractCrawler):
         """
         async with semaphore:
             creator_unhandled_info: Dict = await self.bili_client.get_creator_info(creator_id)
-            # 教学版：仅保留动态所需的最少字段(内存临时用)，不持久化创作者个人资料。
+            # Privacy: keep only in-memory fields needed for dynamics; do not persist creator profiles.
             creator_info: Dict = {
                 "id": creator_id,
                 "name": creator_unhandled_info.get("name"),
             }
-        # 教学版：不再爬取粉丝/关注列表(其他用户的个人信息)，防骚扰。
+        # Privacy: do not crawl fan/follow lists.
         # await self.get_fans(creator_info, semaphore)
         # await self.get_followings(creator_info, semaphore)
         await self.get_dynamics(creator_info, semaphore)

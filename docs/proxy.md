@@ -1,4 +1,6 @@
 # Hướng dẫn dùng IP proxy
+
+Catalog cấu hình: [handbook/usage.md](handbook/usage.md). Pool/provider: [handbook/architecture.md](handbook/architecture.md).
 > Nhắc lại: đừng crawl quy mô lớn hay làm hành vi bất hợp pháp trên các nền tảng mạng xã hội.
 
 ## Sơ đồ luồng đơn giản

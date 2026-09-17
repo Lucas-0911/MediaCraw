@@ -1,5 +1,7 @@
 # Hướng dẫn xuất Excel
 
+Tổng quan lưu trữ: [handbook/usage.md](handbook/usage.md) § Lưu crawler.
+
 ## Tổng quan
 
 MediaCrawler hỗ trợ xuất dữ liệu đã crawl ra file Excel (.xlsx) có định dạng, nhiều sheet cho nội dung, comment và creator.

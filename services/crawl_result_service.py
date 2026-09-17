@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Read-only application service for persisted file-based crawler results."""
 from __future__ import annotations
 
@@ -14,7 +19,7 @@ class CrawlResultService:
     _SUPPORTED_EXTENSIONS = {".json", ".jsonl", ".csv"}
 
     def __init__(self, data_root: Path | str | None = None) -> None:
-        self._data_root = Path(data_root) if data_root else Path(__file__).resolve().parents[2] / "data"
+        self._data_root = Path(data_root) if data_root else Path(__file__).resolve().parents[1] / "data"
 
     async def search(self, platform: str, keyword: str, limit: int) -> list[dict[str, Any]]:
         platform_dir = self._data_root / platform

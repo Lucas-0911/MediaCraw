@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """LLM port and OpenAI-compatible adapter for the Agent Loop."""
 from __future__ import annotations
 
 import json
-from typing import Protocol, Sequence
+from typing import Any, Protocol, Sequence
 
 import httpx
 
 from config import agent_config
 
 from .contracts import AgentContext, LLMResponse, ToolCall, ToolResult
+from .prompts import AGENT_SYSTEM_PROMPT
 
 
 class AgentLLM(Protocol):
@@ -45,17 +51,12 @@ class OpenAICompatibleAgentLLM:
             return LLMResponse(final_answer="Agent LLM is not configured.")
 
         messages: list[dict[str, object]] = [
-            {
-                "role": "system",
-                "content": (
-                    "You are a read-only crawl-results assistant. Use tools only "
-                    "when needed. Never invent facts; if a tool returns empty, say "
-                    "no stored data was found. Do not request crawling automatically. "
-                    "Call crawl_platform only for an explicit user request to crawl."
-                ),
-            },
-            {"role": "user", "content": context.message},
+            {"role": "system", "content": AGENT_SYSTEM_PROMPT},
         ]
+        for turn in context.history:
+            if turn.role in ("user", "assistant"):
+                messages.append({"role": turn.role, "content": turn.content})
+        messages.append({"role": "user", "content": context.message})
         if tool_results:
             # OpenAI-compatible chat APIs require tool output to follow an
             # assistant tool-call message. The loop keeps only safe ToolResult
@@ -79,7 +80,7 @@ class OpenAICompatibleAgentLLM:
                 {
                     "role": "tool",
                     "tool_call_id": result.tool_call_id,
-                    "content": result.model_dump_json(),
+                    "content": json.dumps(self._compact_tool_result(result), ensure_ascii=False, default=str),
                 }
             )
 
@@ -106,3 +107,31 @@ class OpenAICompatibleAgentLLM:
             for call in message.get("tool_calls") or []
         ]
         return LLMResponse(final_answer=message.get("content"), tool_calls=calls)
+
+    @staticmethod
+    def _compact_tool_result(result: ToolResult) -> dict[str, Any]:
+        payload = result.model_dump(mode="json")
+        data = payload.get("data")
+        if not isinstance(data, dict):
+            return payload
+        records = data.get("records")
+        if isinstance(records, list):
+            compacted = []
+            for record in records[:8]:
+                if not isinstance(record, dict):
+                    compacted.append(record)
+                    continue
+                compacted.append(
+                    {
+                        "platform": record.get("platform"),
+                        "record_id": record.get("record_id"),
+                        "title": record.get("title"),
+                        "content": str(record.get("content") or "")[:240],
+                        "url": record.get("url"),
+                    }
+                )
+            data["records"] = compacted
+            if len(records) > 8:
+                data["truncated"] = True
+        payload["data"] = data
+        return payload

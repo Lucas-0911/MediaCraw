@@ -1,5 +1,7 @@
 # Hướng dẫn lưu dữ liệu
 
+Catalog `SAVE_DATA_OPTION`: [handbook/usage.md](handbook/usage.md) § Lưu crawler.
+
 ### Lưu dữ liệu
 
 MediaCrawler hỗ trợ nhiều cách lưu; chọn phương án phù hợp nhu cầu:

@@ -1,5 +1,7 @@
 # Hướng dẫn chế độ CDP
 
+Vận hành tổng: [handbook/usage.md](handbook/usage.md). Kiến trúc CDP: [handbook/architecture.md](handbook/architecture.md) § hạ tầng.
+
 ## Tổng quan
 
 CDP (Chrome DevTools Protocol) là kỹ thuật chống phát hiện nâng cao: điều khiển Chrome/Edge mà người dùng đang cài để crawl. So với automation Playwright truyền thống, CDP có các ưu điểm sau.

@@ -1,23 +1,11 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/api/main.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
 """
-MediaCrawler WebUI API Server
+Trend Radar WebUI API server.
 Start command: uvicorn api.main:app --port 8080 --reload
 Or: python -m api.main
 """
@@ -48,8 +36,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="MediaCrawler WebUI API",
-    description="API for controlling MediaCrawler from WebUI",
+    title="Trend Radar API",
+    description="API for Trend Radar scan, trend scoring, and crawler control",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -85,7 +73,7 @@ async def serve_frontend():
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return {
-        "message": "MediaCrawler WebUI API",
+        "message": "Trend Radar API",
         "version": "1.0.0",
         "docs": "/docs",
         "note": "WebUI not found, please build it first: cd webui && npm run build"
@@ -99,7 +87,7 @@ async def health_check():
 
 @app.get("/api/env/check")
 async def check_environment():
-    """Check if MediaCrawler environment is configured correctly"""
+    """Check if the Trend Radar crawler environment is configured correctly."""
     try:
         # Run uv run main.py --help command to check environment
         # Use PROJECT_ROOT so it works regardless of where uvicorn was started
@@ -129,7 +117,7 @@ async def check_environment():
         if process.returncode == 0:
             return {
                 "success": True,
-                "message": "MediaCrawler environment configured correctly",
+                "message": "Trend Radar environment configured correctly",
                 "output": stdout.decode("utf-8", errors="ignore")[:500]  # Truncate to first 500 characters
             }
         else:

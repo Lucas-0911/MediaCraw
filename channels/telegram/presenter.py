@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Maps structured AgentResponse values to safe Telegram presentation DTOs."""
 from __future__ import annotations
 
-from agent_core.contracts import AgentResponse, AgentResponseStatus, ToolResultStatus
+from agent.core.contracts import AgentResponse, AgentResponseStatus, ToolResultStatus
 
 from .contracts import TelegramMessageResponse
 
 
 class TelegramResponseMapper:
     def map(self, response: AgentResponse) -> TelegramMessageResponse:
+        if response.error == "conversation_busy":
+            return TelegramMessageResponse(
+                text="Hệ thống đang xử lý tin nhắn trước đó, vui lòng thử lại.",
+                error="conversation_busy",
+            )
         if response.status == AgentResponseStatus.TIMEOUT:
             return TelegramMessageResponse(text="Xin lỗi, yêu cầu đã hết thời gian xử lý.", error="timeout")
         if response.status == AgentResponseStatus.ERROR:
@@ -18,6 +28,11 @@ class TelegramResponseMapper:
 
         latest = response.tool_results[-1] if response.tool_results else None
         if latest and latest.status == ToolResultStatus.DENIED:
+            if latest.error_code in ("database_command_denied", "unsafe_operation"):
+                return TelegramMessageResponse(
+                    text="Agent chỉ được gọi hàm nghiệp vụ đã đăng ký, không được truy cập hay chạy lệnh database.",
+                    error=latest.error_code,
+                )
             return TelegramMessageResponse(
                 text="Bạn không có quyền thực hiện yêu cầu này.", error="permission_denied"
             )

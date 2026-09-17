@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """
 回归测试(小红书 xhs):访问受限异常不能击穿到 asyncio.gather。
 
@@ -57,7 +62,7 @@ async def test_note_detail_task_skips_access_error(error):
 
 @pytest.mark.asyncio
 async def test_gather_survives_single_blocked_note():
-    """一条笔记被限流不能让同批次其他笔记的结果一起丢掉。"""
+    """Rate-limiting one note must not drop other notes in the same batch."""
     xhs_client = AsyncMock()
 
     async def get_note_by_id(note_id, xsec_source, xsec_token):
@@ -86,7 +91,7 @@ async def test_gather_survives_single_blocked_note():
 
 @pytest.mark.asyncio
 async def test_creator_flow_skips_blocked_creator(monkeypatch):
-    """创作者主页 403 时跳过该创作者,不中断整个采集任务。"""
+    """Skip a creator on homepage 403 without aborting the whole crawl."""
     monkeypatch.setattr(
         config,
         "XHS_CREATOR_ID_LIST",
@@ -120,5 +125,5 @@ async def test_creator_flow_skips_blocked_creator(monkeypatch):
 
     await crawler.get_creators_and_notes()
 
-    # 被限流的创作者整体跳过,后面的创作者照常采集
+    # Skip the rate-limited creator; continue with the rest.
     assert crawled_user_ids == ["ok"]

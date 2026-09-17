@@ -60,8 +60,10 @@ cd webui && npm run dev
 
 Mở http://localhost:5173/
 
-- Tab **SCAN**: crawl như crawler cũ (keyword, QR/cookie, comment).
+- Tab **SCAN**: crawl (keyword, QR/cookie, comment).
 - Tab **TREND_RADAR**: bảng xếp hạng SP, form chu kỳ quét / số video / Telegram, nút RUN_SCORE, scheduler, draft Shopee/Lazada, tải mp4.
+
+Lớp Agent (`agent/`, `channels/telegram/`) là lối vào hội thoại: tin nhắn thường đi qua AgentLoop + memory; lệnh slash (`/status`, `/crawl`, …) vẫn do handler cũ. Crawler subprocess giữ nguyên `uv run python main.py`.
 
 Hướng dẫn UI chi tiết: [docs/webui-guide.md](docs/webui-guide.md).
 
@@ -112,11 +114,12 @@ API: `GET /api/trend/products`, `PUT /api/trend/settings`, `POST /api/trend/scan
 - Scrape 蝉妈妈 / 飞瓜 / FastMoss / Kalodata
 - Thanh toán Shopee/Lazada tự động (OTP / 2FA / captcha)
 
-## Tài liệu khác
+## Tài liệu đầy đủ
 
-- [docs/README.md](docs/README.md) — mục lục tài liệu
+- [docs/handbook/usage.md](docs/handbook/usage.md) — hướng dẫn vận hành từng lối vào
+- [docs/handbook/architecture.md](docs/handbook/architecture.md) — kiến trúc từng package
+- [docs/README.md](docs/README.md) — mục lục
 - [docs/webui-guide.md](docs/webui-guide.md)
-- [docs/architecture.md](docs/architecture.md)
 - [docs/data_storage_guide.md](docs/data_storage_guide.md)
 - [docs/cdp-mode.md](docs/cdp-mode.md)
 

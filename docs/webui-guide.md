@@ -1,5 +1,7 @@
 # Hướng dẫn chạy và dùng WebUI
 
+Handbook đầy đủ (mọi lối vào, không chỉ UI): [handbook/usage.md](handbook/usage.md). Kiến trúc: [handbook/architecture.md](handbook/architecture.md).
+
 WebUI cấu hình crawler, xem log realtime, duyệt file dữ liệu, và chạy **Trend Radar** (xếp hạng sản phẩm hot TQ + Telegram). Backend FastAPI spawn subprocess `uv run python main.py`; frontend React nhận log qua WebSocket.
 
 Màn hình chính mặc định là tab **TREND_RADAR**. Ngôn ngữ mặc định: **tiếng Việt** (VI / EN). Người vận hành tự chịu trách nhiệm về điều khoản nền tảng và dữ liệu. License: [LICENSE](../LICENSE).

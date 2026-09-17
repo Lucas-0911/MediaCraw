@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """
 教学版回归测试(B站 bilibili):确保视频评论首页的置顶评论及楼中楼不会遗漏。
 
@@ -77,7 +82,7 @@ async def test_video_comments_accept_direct_top_comment():
 
 @pytest.mark.asyncio
 async def test_pinned_comment_not_reinjected_when_cursor_next_stays_zero():
-    """cursor.next 仍为 0 时继续翻页,置顶评论不能被重复注入。"""
+    """Keep paging when cursor.next is 0; pinned comments must not be injected twice."""
     client = object.__new__(BilibiliClient)
     collected = []
     page_calls = 0
@@ -85,7 +90,7 @@ async def test_pinned_comment_not_reinjected_when_cursor_next_stays_zero():
     async def get_video_comments(video_id, order_mode, next_page):
         nonlocal page_calls
         page_calls += 1
-        # 异常/兜底场景:接口一直回 next=0 且 is_end=False
+        # Fallback: API keeps returning next=0 with is_end=False
         return {
             "cursor": {"is_end": False, "next": 0},
             "replies": [{"rpid": 2, "rcount": 0}],
@@ -107,7 +112,7 @@ async def test_pinned_comment_not_reinjected_when_cursor_next_stays_zero():
 
 @pytest.mark.asyncio
 async def test_max_count_applies_when_fetching_sub_comments():
-    """开启楼中楼抓取时 max_count 依然生效,且不为被截断的评论抓子评论。"""
+    """max_count still applies when fetching replies; truncated comments get no sub-comments."""
     client = object.__new__(BilibiliClient)
     collected = []
     sub_comment_calls = []
@@ -144,8 +149,8 @@ async def test_max_count_applies_when_fetching_sub_comments():
         max_count=3,
     )
 
-    # is_end 永远是 False,只能靠 max_count 收敛
+    # is_end stays False; stop via max_count
     assert len(result) == 3
     assert collected == [11, 12, 21]
-    # 第 2 页的 rpid=22 被截断,不应该再去抓它的楼中楼
+    # rpid=22 on page 2 is truncated; do not fetch its replies
     assert sub_comment_calls == [11, 12, 21]

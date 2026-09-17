@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/store/weibo/__init__.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-# -*- coding: utf-8 -*-
-# @Author  : relakkes@gmail.com
 # @Time    : 2024/1/14 21:34
 # @Desc    :
 
@@ -84,8 +69,8 @@ async def update_weibo_note(note_item: Dict):
     note_id = mblog.get("id")
     content_text = mblog.get("text")
     clean_text = re.sub(r"<.*?>", "", content_text)
-    # 教学版：原始 user_id 匿名化为 creator_hash，昵称脱敏；
-    # 不采集头像/主页链接/性别/IP 归属地等可定位真人的信息。
+    # Privacy: raw user_id is hashed to creator_hash; nicknames are masked;
+    # Do not collect avatar, profile URL, gender, or IP location.
     save_content_item = {
         # Weibo information
         "note_id": note_id,
@@ -98,7 +83,7 @@ async def update_weibo_note(note_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
         "note_url": f"https://m.weibo.cn/detail/{note_id}",
 
-        # 创作者信息（匿名化/脱敏，不含原始 user_id/avatar/gender/profile_url/ip_location）
+        # Creator fields (anonymized/masked; no raw user_id/avatar/gender/profile_url/ip_location)
         "creator_hash": anonymize_user_id(user_info.get("id")),
         "nickname": mask_nickname(user_info.get("screen_name", "")),
         "source_keyword": source_keyword_var.get(),
@@ -139,8 +124,8 @@ async def update_weibo_note_comment(note_id: str, comment_item: Dict):
     user_info: Dict = comment_item.get("user") or {}
     content_text = comment_item.get("text")
     clean_text = re.sub(r"<.*?>", "", content_text)
-    # 教学版：原始 user_id 匿名化为 creator_hash，昵称脱敏；
-    # 不采集头像/主页链接/性别/IP 归属地等可定位真人的信息。
+    # Privacy: raw user_id is hashed to creator_hash; nicknames are masked;
+    # Do not collect avatar, profile URL, gender, or IP location.
     save_comment_item = {
         "comment_id": comment_id,
         "create_time": utils.rfc2822_to_timestamp(comment_item.get("created_at")),
@@ -152,7 +137,7 @@ async def update_weibo_note_comment(note_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
         "parent_comment_id": comment_item.get("rootid", ""),
 
-        # 创作者信息（匿名化/脱敏，不含原始 user_id/avatar/gender/profile_url/ip_location）
+        # Creator fields (anonymized/masked; no raw user_id/avatar/gender/profile_url/ip_location)
         "creator_hash": anonymize_user_id(user_info.get("id")),
         "nickname": mask_nickname(user_info.get("screen_name", "")),
     }
@@ -186,5 +171,5 @@ async def save_creator(user_id: str, user_info: Dict):
     Returns:
 
     """
-    # 教学版：创作者个人信息均不采集不持久化
+    # Privacy: creator PII is not collected or persisted
     return

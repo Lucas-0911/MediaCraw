@@ -1,5 +1,7 @@
 # Quản lý môi trường local
 
+Checklist đầy đủ: [handbook/usage.md](handbook/usage.md) § Cài đặt.
+
 ## Phương án khuyến nghị: uv
 
 ### 1. Điều kiện tiên quyết

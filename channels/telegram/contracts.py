@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Safe Telegram boundary DTOs; no bot SDK is required here."""
 from __future__ import annotations
 
@@ -31,6 +36,7 @@ class TelegramUser(BaseModel):
     current_job_id: Optional[str] = None
     current_idea_ids: List[str] = Field(default_factory=list)
     current_video_job_id: Optional[str] = None
+    cookie_available: bool = False
 
 
 class TelegramMessageResponse(BaseModel):

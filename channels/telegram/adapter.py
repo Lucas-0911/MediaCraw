@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Routing-only Telegram adapter: legacy commands or AgentLoop."""
 from __future__ import annotations
 
 from typing import Protocol
 
-from agent_core.contracts import AgentContext
-from agent_core.loop import AgentLoop
+from agent.core.contracts import AgentContext
+from agent.core.loop import AgentLoop
 
 from .auth import TelegramUserResolver
 from .contracts import TelegramMessageResponse, TelegramUpdate
@@ -52,6 +57,7 @@ class TelegramAgentHandler:
             current_job_id=user.current_job_id,
             current_idea_ids=user.current_idea_ids,
             current_video_job_id=user.current_video_job_id,
+            cookie_available=user.cookie_available,
             metadata={"telegram_update_id": update.update_id, "telegram_message_id": update.message_id},
         )
         return self._response_mapper.map(await self._agent_loop.run(context))

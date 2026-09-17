@@ -60,10 +60,12 @@ cd webui && npm run dev
 
 Open http://localhost:5173/
 
-- **SCAN**: classic crawler (keywords, QR/cookie, comments).
+- **SCAN**: crawler (keywords, QR/cookie, comments).
 - **TREND_RADAR**: product ranking, scan/video/Telegram settings, RUN_SCORE, scheduler, marketplace drafts, mp4 download.
 
-UI guide: [docs/webui-guide.md](docs/webui-guide.md).
+The Agent layer (`agent/`, `channels/telegram/`) is the conversational entry: normal messages go through AgentLoop + memory; slash commands (`/status`, `/crawl`, …) stay on the legacy handler. The crawler subprocess remains `uv run python main.py`.
+
+UI guide: [docs/webui-guide.md](docs/webui-guide.md). Full operator + architecture handbook (Vietnamese): [docs/handbook/usage.md](docs/handbook/usage.md), [docs/handbook/architecture.md](docs/handbook/architecture.md).
 
 Single-process build:
 
@@ -114,9 +116,10 @@ API: `GET /api/trend/products`, `PUT /api/trend/settings`, `POST /api/trend/scan
 
 ## More docs
 
+- [docs/handbook/usage.md](docs/handbook/usage.md) — operator handbook (Vietnamese)
+- [docs/handbook/architecture.md](docs/handbook/architecture.md) — architecture by package (Vietnamese)
 - [docs/README.md](docs/README.md) — docs index
 - [docs/webui-guide.md](docs/webui-guide.md)
-- [docs/architecture.md](docs/architecture.md)
 - [docs/data_storage_guide.md](docs/data_storage_guide.md)
 - [docs/cdp-mode.md](docs/cdp-mode.md)
 

@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 import pytest
 import config
 from unittest.mock import AsyncMock, patch
 from fastapi.testclient import TestClient
 from cmd_arg import parse_cmd
 from api.schemas import CrawlerStartRequest, PlatformEnum, LoginTypeEnum, CrawlerTypeEnum
-from api.services.crawler_manager import CrawlerManager
+from services.crawler_manager import CrawlerManager
 from api.main import app
 
 @pytest.mark.asyncio

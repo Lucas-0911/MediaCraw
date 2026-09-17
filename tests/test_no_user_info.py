@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-"""
-教学版回归测试：确保爬取/存储链路不再持久化可定位真人的用户个人信息。
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-覆盖：
-1. ORM 自省 —— database.models 中无禁用列、creator 档案表已删除、内容/评论表含 creator_hash。
-2. 提取层 —— 用 mock API/HTML payload 喂各平台提取器，断言输出 dict 不含禁用字段、
-   不含原始 user_id、昵称已脱敏且不等于原文。
-3. 仓库 grep 断言 —— store/ 与 media_platform/ 不再把禁用字段作为存储 dict 的 key。
+"""Privacy regression: crawled/stored records must not keep identifiable creator PII.
+
+Covers:
+1. ORM introspection — no forbidden columns, creator profile tables gone, content/comment tables have creator_hash.
+2. Extractors — mock payloads must not emit forbidden keys or raw user_id; nicknames are masked.
+3. Repo grep — store/ and media_platform/ must not write forbidden keys into storage dicts.
 """
 import re
 import subprocess
@@ -16,7 +19,7 @@ import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# 统一的禁用字段名(键)。昵称字段(nickname/user_nickname/screen_name/name/user_name)允许保留(值需脱敏)。
+# Forbidden keys. Nickname fields may remain if values are masked.
 FORBIDDEN_KEYS = {
     "user_id", "sec_uid", "short_user_id", "user_unique_id", "user_signature",
     "avatar", "user_avatar", "face", "sign", "profile_url", "user_link",
@@ -28,7 +31,7 @@ NICK_KEYS = {"nickname", "user_nickname", "screen_name", "name", "user_name"}
 MASK_RE = re.compile(r"^.?\*{1,4}.?$")
 
 
-# ----------------------------- ORM 自省 -----------------------------
+# ----------------------------- ORM introspection -----------------------------
 
 def test_orm_has_no_forbidden_columns():
     import database.models as m
@@ -66,7 +69,7 @@ def test_content_tables_have_creator_hash():
         assert "creator_hash" in cols, f"{t} 缺少 creator_hash 列"
 
 
-# ----------------------------- 提取层 mock -----------------------------
+# ----------------------------- extractor mocks -----------------------------
 
 def _check_no_forbidden_keys(d: dict, label: str):
     keys = set(d.keys())
@@ -90,7 +93,7 @@ def test_mask_and_hash_tools():
     h = anonymize_user_id("12345")
     assert h and h != "12345" and re.fullmatch(r"[0-9a-f]{16}", h)
     assert anonymize_user_id(None) == "" and anonymize_user_id("") == ""
-    # 昵称脱敏：首尾留1字、中间星号，且不等于原文
+    # Nickname masking: keep first/last char, stars in the middle, not equal to original
     assert mask_nickname("张三丰") != "张三丰"
     assert "*" in mask_nickname("张三丰")
     assert mask_nickname(None) == ""
@@ -181,7 +184,7 @@ def test_zhihu_comment_extraction_masks_user_info():
 
 
 def test_bilibili_video_dict_masks_user_info():
-    # 直接测 store/bilibili/__init__.py 的拍平逻辑(不触发网络)
+    # Test store/bilibili flattening without network I/O
     import asyncio
     from store.bilibili import update_bilibili_video
     video_item = {
@@ -192,7 +195,7 @@ def test_bilibili_video_dict_masks_user_info():
             "pic": "http://x/cover.jpg",
         }
     }
-    # 拦截真实存储：替换工厂返回一个捕获 dict 的假 store
+    # Replace the store factory with a dict-capturing fake
     captured = {}
 
     class FakeStore:
@@ -212,21 +215,21 @@ def test_bilibili_video_dict_masks_user_info():
     _check_nickname_masked(captured, "UP主大人", "bili_video")
 
 
-# ----------------------------- 仓库 grep 断言 -----------------------------
+# ----------------------------- repo grep assertions -----------------------------
 
 def test_store_no_forbidden_dict_keys():
-    # store/ 下不得把禁用字段作为存储 dict 的 key("field": value 形式)
+    # store/ must not use forbidden fields as storage dict keys
     out = subprocess.run(
         ["grep", "-rnE", '"(' + "|".join(FORBIDDEN_KEYS) + r')"\s*:', str(ROOT / "store")],
         capture_output=True, text=True,
     )
-    # 允许的例外：Mongo store_creator 里的 query={"user_id": ...} 已全部改为 pass，应为空
+    # Allowed exception: store_creator query={"user_id": ...} was replaced with pass
     assert out.stdout.strip() == "", f"store/ 仍写入禁用字段键:\n{out.stdout}"
 
 
 def test_store_no_creator_orm_imports():
-    # 已删除的 creator ORM 表(XhsCreator/DyCreator/...)不得再从 database.models 导入。
-    # 注意:model/m_*.py 里的同名 pydantic 类是内存类型，允许保留。
+    # Removed creator ORM tables must not be imported from database.models.
+    # Note: same-named pydantic classes in model/m_*.py are in-memory types and may remain.
     out = subprocess.run(
         ["grep", "-rnE",
          r"from database\.models import.*(XhsCreator|DyCreator|WeiboCreator|TiebaCreator|ZhihuCreator|BilibiliUpInfo|BilibiliContactInfo)",

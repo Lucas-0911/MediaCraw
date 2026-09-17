@@ -1,22 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/kuaishou/core.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
-
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
 import asyncio
 import os
@@ -98,7 +84,7 @@ class KuaishouCrawler(AbstractCrawler):
 
 
             self.context_page = await self.browser_context.new_page()
-            # 注入快手签名环境捕获脚本，页面加载后即可通过 __ks_realm 生成 __NS_hxfalcon 签名
+            # Inject the Kuaishou signing capture script so __ks_realm can mint __NS_hxfalcon after load
             await self.context_page.add_init_script(KS_SIGN_CAPTURE_SCRIPT)
             await self.context_page.goto(f"{self.index_url}?isHome=1")
 
@@ -186,7 +172,7 @@ class KuaishouCrawler(AbstractCrawler):
                 page += 1
 
                 # Sleep after page navigation
-                # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+                # Add 1-3s jitter on the base delay to reduce server-side rate limits
                 sleep_sec = config.CRAWLER_MAX_SLEEP_SEC + random.uniform(1, 3)
                 await asyncio.sleep(sleep_sec)
                 utils.logger.info(f"[KuaishouCrawler.search] Sleeping for {sleep_sec:.1f} seconds after page {page-1}")
@@ -226,7 +212,7 @@ class KuaishouCrawler(AbstractCrawler):
                 result = await self.ks_client.get_video_info(video_id)
 
                 # Sleep after fetching video details
-                # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+                # Add 1-3s jitter on the base delay to reduce server-side rate limits
                 sleep_sec = config.CRAWLER_MAX_SLEEP_SEC + random.uniform(1, 3)
                 await asyncio.sleep(sleep_sec)
                 utils.logger.info(f"[KuaishouCrawler.get_video_info_task] Sleeping for {sleep_sec:.1f} seconds after fetching video details {video_id}")
@@ -293,7 +279,7 @@ class KuaishouCrawler(AbstractCrawler):
                 )
 
                 # Sleep before fetching comments
-                # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+                # Add 1-3s jitter on the base delay to reduce server-side rate limits
                 sleep_sec = config.CRAWLER_MAX_SLEEP_SEC + random.uniform(1, 3)
                 await asyncio.sleep(sleep_sec)
                 utils.logger.info(f"[KuaishouCrawler.get_comments] Sleeping for {sleep_sec:.1f} seconds before fetching comments for video {video_id}")

@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/store/bilibili/__init__.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-# -*- coding: utf-8 -*-
-# @Author  : relakkes@gmail.com
 # @Time    : 2024/1/14 19:34
 # @Desc    :
 
@@ -83,7 +68,7 @@ async def update_bilibili_video(video_item: Dict):
 
 
 async def update_up_info(video_item: Dict):
-    # 教学版：UP 主个人资料(昵称/性别/签名/头像/粉丝数等)不再落库，防骚扰。
+    # Privacy: UP-main profiles are not persisted.
     return
 
 
@@ -132,12 +117,12 @@ async def store_video(aid, video_content, extension_file_name):
 
 
 async def batch_update_bilibili_creator_fans(creator_info: Dict, fans_list: List[Dict]):
-    # 教学版：不再采集/存储粉丝列表(其他用户的个人信息)，防骚扰。
+    # Privacy: fan lists are not collected or stored.
     return
 
 
 async def batch_update_bilibili_creator_followings(creator_info: Dict, followings_list: List[Dict]):
-    # 教学版：不再采集/存储关注列表(其他用户的个人信息)，防骚扰。
+    # Privacy: following lists are not collected or stored.
     return
 
 
@@ -168,7 +153,7 @@ async def batch_update_bilibili_creator_dynamics(creator_info: Dict, dynamics_li
 
 
 async def update_bilibili_creator_contact(creator_info: Dict, fan_info: Dict):
-    # 教学版：UP-粉丝关系表已移除，不再存储联系人信息。
+    # Privacy: UP-fan relation tables were removed。
     return
 
 

@@ -1,8 +1,10 @@
 # Agent + Telegram Architecture
 
+> **Historical design record.** Live architecture: [handbook/architecture.md](handbook/architecture.md). Live tree: [code-structure.md](code-structure.md). Paths below (`agent_core/`, `api/services/`) are **stale** — current packages are `agent/`, `services/`, `app/wiring.py`. Registered tools today: `search_crawl_results`, `crawl_platform` only.
+
 ## Scope
 
-This is an architecture-only proposal. No existing code or dependency is changed.
+Phases C–F implemented the agent loop, Telegram adapter, conversation memory, and the Trend Radar package layout. This document remains the design record; live paths are in `docs/code-structure.md` and `docs/handbook/architecture.md`.
 It preserves the React WebUI and the crawler subprocess contract:
 
     uv run python main.py

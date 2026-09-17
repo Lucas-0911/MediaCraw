@@ -1,4 +1,4 @@
-# Pre-commit hooks configuration for MediaCrawler project
+# Pre-commit hooks for Trend Radar
 # See https://pre-commit.com for more information
 
 repos:

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """TikTok Vietnam / international (tiktok.com) configuration."""
 
 # Guest / public crawl without login. Keep True so you can test without a TikTok account.

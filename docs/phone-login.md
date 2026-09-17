@@ -1,5 +1,7 @@
 # Ghi chú đăng nhập bằng số điện thoại + mã OTP
 
+CLI `--lt phone` cũng ghi trong [handbook/usage.md](handbook/usage.md). Không khuyến nghị.
+
 Quy trình phức tạp, không khuyến nghị. Ưu tiên QR + CDP.
 
 Khi trình duyệt giả lập đăng nhập SĐT, phần mềm chuyển tiếp SMS gửi OTP về crawler để điền tự động.

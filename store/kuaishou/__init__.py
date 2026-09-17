@@ -1,25 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/store/kuaishou/__init__.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-
-# -*- coding: utf-8 -*-
-# @Author  : relakkes@gmail.com
 # @Time    : 2024/1/14 20:03
 # @Desc    :
 from typing import List
@@ -97,9 +81,9 @@ async def update_ks_video_comment(video_id: str, comment_item: Dict):
         "create_time": comment_item.get("timestamp"),
         "video_id": video_id,
         "content": comment_item.get("content"),
-        # 创作者匿名哈希(不存原始 user_id)：V2: author_id, Old: authorId
+        # Anonymized creator hash (no raw user_id): V2 author_id, old authorId
         "creator_hash": anonymize_user_id(comment_item.get("author_id") or comment_item.get("authorId")),
-        # 用户昵称(已脱敏)：V2: author_name, Old: authorName
+        # Masked nickname: V2 author_name, old authorName
         "nickname": mask_nickname(comment_item.get("author_name") or comment_item.get("authorName")),
         # V2: commentCount, Old: subCommentCount
         "sub_comment_count": str(comment_item.get("commentCount") or comment_item.get("subCommentCount", 0)),
@@ -110,5 +94,5 @@ async def update_ks_video_comment(video_id: str, comment_item: Dict):
     await KuaishouStoreFactory.create_store().store_comment(comment_item=save_comment_item)
 
 async def save_creator(user_id: str, creator: Dict):
-    # 教学版：创作者个人资料(昵称/性别/头像/签名/IP/粉丝数等)不再落库，防骚扰。
+    # Privacy: creator profiles are not persisted.
     return

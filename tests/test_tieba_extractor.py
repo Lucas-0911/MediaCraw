@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
 from pathlib import Path
 
@@ -151,13 +155,13 @@ def test_extract_note_detail_and_comments_from_current_pc_api():
     assert note.tieba_name == "dota2吧"
     assert note.total_replay_num == 15
     assert note.total_replay_page == 1
-    # 教学版已移除 ip_location 等可定位真人字段
+    # Privacy: identifiable fields such as ip_location were removed
     assert len(comments) == 1
     assert comments[0].comment_id == "153154097267"
     assert comments[0].content == "xg现在大树阵容另一个辅助不选控制"
     assert comments[0].user_nickname == "期***3"
     assert comments[0].sub_comment_count == 4
-    # 教学版已移除 ip_location 等可定位真人字段
+    # Privacy: identifiable fields such as ip_location were removed
 
 
 def test_extract_creator_info_and_threads_from_current_pc_api():
@@ -194,7 +198,7 @@ def test_extract_creator_info_and_threads_from_current_pc_api():
     assert creator.user_nickname == "米***子"
     assert creator.fans == 58
     assert creator.follows == 1
-    # 教学版已移除 user_id、user_name、ip_location 等可定位真人字段
+    # Privacy: identifiable fields such as user_id/user_name/ip_location were removed
     assert creator.registration_duration == "7.8"
     assert thread_ids == ["10208192951", "9835114923"]
 
@@ -237,7 +241,7 @@ def test_extract_note_detail_from_post_page():
     assert note.tieba_name == "以太比特吧"
     assert note.total_replay_num == 786
     assert note.total_replay_page == 13
-    # 教学版已移除 ip_location 等可定位真人字段
+    # Privacy: identifiable fields such as ip_location were removed
 
 
 def test_extract_parent_comments_from_post_page():
@@ -251,7 +255,7 @@ def test_extract_parent_comments_from_post_page():
     assert comments[0].content == "中国队第22金！无悬念！"
     assert comments[0].user_nickname == "h***n"
     assert comments[0].tieba_name == "网球风云吧"
-    # 教学版已移除 ip_location 等可定位真人字段
+    # Privacy: identifiable fields such as ip_location were removed
 
 
 def test_extract_sub_comments_with_class_token_matching():
@@ -273,4 +277,4 @@ def test_extract_sub_comments_with_class_token_matching():
     assert len(comments) >= 10
     assert comments[0].comment_id
     assert comments[0].parent_comment_id == parent.comment_id
-    # 教学版已移除 user_link 等可定位真人字段的采集
+    # Privacy: identifiable fields such as user_link are not collected

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Read-only search tool backed by the crawl-result application service."""
 from __future__ import annotations
 
@@ -6,8 +11,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from agent_core.contracts import AgentContext, ToolResult, ToolResultStatus
-from api.services.crawl_result_service import CrawlResultService
+from agent.core.contracts import AgentContext, ToolResult, ToolResultStatus
+from services.crawl_result_service import CrawlResultService
 
 
 class SearchCrawlResultsInput(BaseModel):

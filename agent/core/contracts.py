@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 """Validated contracts shared by the Agent Loop, LLM client and tools."""
 from __future__ import annotations
 
@@ -22,8 +27,18 @@ class ToolResultStatus(str, Enum):
     DENIED = "denied"
 
 
+class AgentHistoryMessage(BaseModel):
+    """One prior conversation turn loaded for the current run. Not a DB entity."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    role: Literal["user", "assistant", "system", "tool"] = "user"
+    content: str = Field(default="", max_length=32_000)
+    created_at: Optional[int] = None
+
+
 class AgentContext(BaseModel):
-    """Safe, channel-neutral request context; it intentionally has no memory."""
+    """Safe request/run state. Persistent history lives in AgentMemory, not here."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -42,6 +57,8 @@ class AgentContext(BaseModel):
     current_job_id: Optional[str] = Field(default=None, max_length=128)
     current_idea_ids: List[str] = Field(default_factory=list, max_length=100)
     current_video_job_id: Optional[str] = Field(default=None, max_length=128)
+    cookie_available: bool = False
+    history: List[AgentHistoryMessage] = Field(default_factory=list)
     metadata: Dict[str, str] = Field(default_factory=dict)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 

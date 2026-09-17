@@ -1,5 +1,7 @@
 # Các lỗi thường gặp khi chạy chương trình
 
+Bảng sự cố operator: [handbook/usage.md](handbook/usage.md) § Khi gặp sự cố.
+
 ## Thiếu môi trường Node
 
 Hỏi: Crawl Douyin và Zhihu báo lỗi: `execjs._exceptions.ProgramError: SyntaxError: 缺少 ';'`  

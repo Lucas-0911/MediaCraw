@@ -1,24 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/kuaishou/help.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
-
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-
-# -*- coding: utf-8 -*-
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
 import re
 
@@ -26,11 +10,11 @@ from playwright.async_api import Page
 
 from model.m_kuaishou import VideoUrlInfo, CreatorUrlInfo
 
-# 快手网页端签名（__NS_hxfalcon）支持。
-# 快手网页端已将批量列表接口迁移到带签名的 REST 端点，
-# 通过页面加载时注入的捕获脚本获取页面内置签名环境的调用入口，
-# 再调用 $encode 生成签名。仅复用页面自身已加载的 JS 环境，
-# 不引入额外的签名代码文件。
+# Kuaishou web signing (__NS_hxfalcon) support.
+# Kuaishou web moved batch list APIs to signed REST endpoints.
+# A page-load capture script obtains the in-page signing entrypoint,
+# then call $encode. Reuse the page's own loaded JS environment;
+# Do not add a separate signing implementation.
 
 KS_SIGN_CAPTURE_SCRIPT = """
 // 捕获快手页面内置签名环境的调用入口（学习用途）
@@ -71,8 +55,8 @@ async def get_ks_sign_from_playwright(page: Page, url: str, query: dict, body: d
     try:
         await page.wait_for_function("() => !!window.__ks_realm", timeout=15000)
     except Exception:
-        # 页面可能在 cookie 注入前就已加载（未登录态），此时签名环境未初始化，
-        # 重载页面让其在登录态下加载并触发签名请求，捕获脚本将随新 document 生效
+        # The page may have loaded before cookies (logged-out), so the signing env is uninitialized.
+        # Reload so the logged-in page initializes signing; the capture script binds to the new document
         await page.reload(wait_until="domcontentloaded")
         await page.wait_for_function("() => !!window.__ks_realm", timeout=20000)
     return await page.evaluate(

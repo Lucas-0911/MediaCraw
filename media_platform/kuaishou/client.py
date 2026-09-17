@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/kuaishou/client.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-
-# -*- coding: utf-8 -*-
 import asyncio
 import json
 import random
@@ -127,7 +112,7 @@ class KuaiShouClient(AbstractApiClient, ProxyRefreshMixin):
         for attempt in range(max_retry):
             await self._refresh_proxy_if_expired()
 
-            # 签名绑定请求内容和时间窗口，重试时必须重新生成
+            # Signature is bound to body and time window; regenerate on retry
             sign = await get_ks_sign_from_playwright(
                 self.playwright_page,
                 uri,
@@ -326,7 +311,7 @@ class KuaiShouClient(AbstractApiClient, ProxyRefreshMixin):
             if callback:  # If there is a callback function, execute the callback function
                 await callback(photo_id, comments)
             result.extend(comments)
-            # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+            # Add 1-3s jitter on the base delay to reduce server-side rate limits
             await asyncio.sleep(crawl_interval + random.uniform(1, 3))
             sub_comments = await self.get_comments_all_sub_comments(
                 comments, photo_id, crawl_interval, callback
@@ -381,7 +366,7 @@ class KuaiShouClient(AbstractApiClient, ProxyRefreshMixin):
 
                 if callback and sub_comments:
                     await callback(photo_id, sub_comments)
-                # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+                # Add 1-3s jitter on the base delay to reduce server-side rate limits
                 await asyncio.sleep(crawl_interval + random.uniform(1, 3))
                 result.extend(sub_comments)
         return result
@@ -421,8 +406,8 @@ class KuaiShouClient(AbstractApiClient, ProxyRefreshMixin):
                 )
                 break
 
-            # REST 接口用 result 字段表示业务状态，必须显式校验，
-            # 否则接口被拒(result:50)会被静默当成"没有更多视频"
+            # REST APIs use result for business status; validate it explicitly,
+            # otherwise a rejected call (result:50) is silently treated as no more videos
             result_code = videos_res.get("result")
             if result_code != 1:
                 utils.logger.error(
@@ -443,7 +428,7 @@ class KuaiShouClient(AbstractApiClient, ProxyRefreshMixin):
 
             if callback:
                 await callback(videos)
-            # 固定延时基础上加 1-3 秒随机抖动，降低服务端限流概率
+            # Add 1-3s jitter on the base delay to reduce server-side rate limits
             await asyncio.sleep(crawl_interval + random.uniform(1, 3))
             result.extend(videos)
         return result

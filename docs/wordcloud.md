@@ -1,5 +1,7 @@
 # Thao tác wordcloud
 
+Bật `ENABLE_GET_WORDCLOUD` trong [handbook/usage.md](handbook/usage.md) § Crawler.
+
 ## 1. Gọi wordcloud đúng cách
 > Lưu ý: chỉ sinh wordcloud khi định dạng lưu là json hoặc jsonl. Các kiểu lưu khác sẽ bổ sung sau.
 

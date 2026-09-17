@@ -1,15 +1,21 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2026 Trend Radar product owner.
+#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
+
 import asyncio
 from pathlib import Path
 
 from pydantic import BaseModel
 
-from agent_core.contracts import LLMResponse, ToolCall, ToolResult, ToolResultStatus
-from agent_core.loop import AgentLoop
-from agent_core.registry import ToolRegistry
-from agent_tools.crawl_platform import CrawlPlatformTool
-from agent_tools.search_crawl_results import SearchCrawlResultsTool
-from api.services.crawl_result_service import CrawlResultService
-from api.services.crawler_job_service import CrawlJob
+from agent.core.contracts import LLMResponse, ToolCall, ToolResult, ToolResultStatus
+from agent.core.loop import AgentLoop
+from agent.core.registry import ToolRegistry
+from agent.tools.crawl_platform import CrawlPlatformTool
+from agent.tools.search_crawl_results import SearchCrawlResultsTool
+from services.crawl_result_service import CrawlResultService
+from services.crawler_job_service import CrawlJob
 from channels.telegram.adapter import TelegramAgentHandler
 from channels.telegram.contracts import TelegramMessageResponse, TelegramUpdate, TelegramUser
 

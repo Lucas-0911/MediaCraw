@@ -1,10 +1,16 @@
 # Tài liệu kiến trúc Trend Radar / crawler
 
+> **Nguồn sự thật đã chuyển.** Tài liệu kiến trúc đầy đủ, khớp code hiện tại (`app/`, `agent/`, `channels/`, `services/`, `trend/`): [handbook/architecture.md](handbook/architecture.md). Hướng dẫn vận hành: [handbook/usage.md](handbook/usage.md). File này giữ lại để không gãy link cũ; nội dung bên dưới là bản crawler-centric lịch sử và có thể lệch path.
+
+---
+
+# Tài liệu kiến trúc Trend Radar / crawler (lịch sử)
+
 ## 1. Tổng quan dự án
 
 ### 1.1 Giới thiệu
 
-Product **Trend Radar**: crawl Douyin (TikTok VN phụ) để tìm sản phẩm hot Trung Quốc, chấm HeatNow/Confidence, gửi Telegram. Lớp crawler đa nền tảng xuất phát từ MediaCrawler.
+Product **Trend Radar**: agent-orchestrated crawl of Douyin (TikTok VN phụ) để tìm sản phẩm hot Trung Quốc, chấm HeatNow/Confidence, gửi Telegram. Crawler đa nền tảng là engine nội bộ (xuất phát từ MediaCrawler; xem NOTICE).
 
 ### 1.2 Nền tảng hỗ trợ
 

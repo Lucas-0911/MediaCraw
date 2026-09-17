@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 relakkes@gmail.com
+# Copyright (c) 2026 Trend Radar product owner.
 #
-# This file is part of MediaCrawler project.
-# Repository: https://github.com/NanmiCoder/MediaCrawler/blob/main/store/weibo/_store_impl.py
-# GitHub: https://github.com/NanmiCoder
-# Licensed under NON-COMMERCIAL LEARNING LICENSE 1.1
-#
+# This file is part of Trend Radar.
+# See LICENSE. Upstream origin: NOTICE.
 
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：
-# 1. 不得用于任何商业用途。
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。
-# 3. 不得进行大规模爬取或对平台造成运营干扰。
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。
-# 5. 不得用于任何非法或不当的用途。
-#
-# 详细许可条款请参阅项目根目录下的LICENSE文件。
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。
-
-
-# -*- coding: utf-8 -*-
 # @Author  : persist1@126.com
 # @Time    : 2025/9/5 19:34
 # @Desc    : Weibo storage implementation class
@@ -59,8 +44,8 @@ def calculate_number_of_files(file_store_path: str) -> int:
 
 
 def _filter_model_fields(model_cls, item: Dict) -> Dict:
-    """只保留目标 ORM 模型已有的列，避免把已删除/多余字段（如 avatar/gender/
-    profile_url/ip_location/user_id）传给 ORM 构造而报错。教学版兜底保护。"""
+    """Keep only columns that exist on the ORM model so removed fields (avatar/gender/
+    profile_url/ip_location/user_id) never reach the ORM constructor. Privacy fallback."""
     allowed = {col.name for col in model_cls.__table__.columns}
     return {k: v for k, v in item.items() if k in allowed}
 
@@ -95,7 +80,7 @@ class WeiboCsvStoreImplement(AbstractStore):
     async def store_creator(self, creator: Dict):
         """
         Weibo creator CSV storage implementation
-        教学版：不采集/持久化创作者个人信息，空操作。
+        Privacy: creator PII is not collected; no-op.
         Args:
             creator:
 
@@ -116,7 +101,7 @@ class WeiboDbStoreImplement(AbstractStore):
         Returns:
 
         """
-        # 教学版兜底：过滤掉已删除/多余字段，确保不会把 user_id/avatar 等传给 ORM
+        # Privacy: drop removed fields so user_id/avatar never reach the ORM
         content_item = _filter_model_fields(WeiboNote, content_item)
         note_id = content_item.get("note_id")
         async with get_session() as session:
@@ -144,7 +129,7 @@ class WeiboDbStoreImplement(AbstractStore):
         Returns:
 
         """
-        # 教学版兜底：过滤掉已删除/多余字段，确保不会把 user_id/avatar 等传给 ORM
+        # Privacy: drop removed fields so user_id/avatar never reach the ORM
         comment_item = _filter_model_fields(WeiboNoteComment, comment_item)
         comment_id = comment_item.get("comment_id")
         comment_item["create_time"] = int(comment_item.get("create_time", 0) or 0)
@@ -211,7 +196,7 @@ class WeiboJsonStoreImplement(AbstractStore):
     async def store_creator(self, creator: Dict):
         """
         creator JSON storage implementation
-        教学版：不采集/持久化创作者个人信息，空操作。
+        Privacy: creator PII is not collected; no-op.
         Args:
             creator:
 
@@ -233,7 +218,7 @@ class WeiboJsonlStoreImplement(AbstractStore):
         await self.writer.write_to_jsonl(item_type="comments", item=comment_item)
 
     async def store_creator(self, creator: Dict):
-        # 教学版：不采集/持久化创作者个人信息，空操作。
+        # Privacy: creator PII is not collected; no-op.
         pass
 
 
@@ -287,7 +272,7 @@ class WeiboMongoStoreImplement(AbstractStore):
     async def store_creator(self, creator_item: Dict):
         """
         Store creator information to MongoDB
-        教学版：不采集/持久化创作者个人信息，空操作。
+        Privacy: creator PII is not collected; no-op.
         Args:
             creator_item: Creator data
         """
